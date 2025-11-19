@@ -1,0 +1,45 @@
+CRDT Synchronization Test Report
+Generated: 2025-09-09T11:02:56.438Z
+===================================
+
+Overall CRDT Score: 81/100
+Convergence Rate: 83.3%
+Total Tests: 7
+Duration: 0.1 seconds
+
+Performance Metrics:
+- Average Ops/Sec: 31790.1
+- Max Throughput: 37037.0 ops/sec
+- Scalability: good
+
+Test Results:
+
+Basic CRDT Operations:
+  Duration: 0.0 seconds
+  Operations: 20/20
+
+Conflict Resolution:
+  Duration: 0.0 seconds
+  Convergence: NO
+
+Network Partition Tolerance:
+  Duration: 0.0 seconds
+  Partition Tolerant: YES
+
+Convergence Verification:
+  Duration: 0.0 seconds
+  Convergence: YES
+  Convergence Score: 100.0%
+
+Concurrent Operations Performance:
+  Duration: 0.1 seconds
+
+Data Consistency Validation:
+  Duration: 0.0 seconds
+  Consistency Score: 66.7%
+
+Merge Operation Efficiency:
+  Duration: 0.0 seconds
+
+Recommendations:
+1. [HIGH] convergence: Convergence rate is below acceptable threshold. Check synchronization mechanisms.

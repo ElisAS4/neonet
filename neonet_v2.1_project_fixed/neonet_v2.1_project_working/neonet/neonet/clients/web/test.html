@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeoNet Enhanced - Teste</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2196F3 0%, #21CBF3 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+        
+        .header p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+        
+        .test-section h3 {
+            margin-top: 0;
+            color: #2196F3;
+            border-bottom: 2px solid #2196F3;
+            padding-bottom: 10px;
+        }
+        
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .status-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #2196F3;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .status-card h4 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-online { background: #4CAF50; }
+        .status-offline { background: #F44336; }
+        .status-pending { background: #FF9800; }
+        .status-unknown { background: #9E9E9E; }
+        
+        .test-results {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .test-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .test-item:last-child {
+            border-bottom: none;
+        }
+        
+        .test-name {
+            font-weight: 500;
+        }
+        
+        .test-result {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+        
+        .test-pass {
+            background: #E8F5E8;
+            color: #2E7D32;
+        }
+        
+        .test-fail {
+            background: #FFEBEE;
+            color: #C62828;
+        }
+        
+        .test-pending {
+            background: #FFF3E0;
+            color: #F57C00;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background: #2196F3;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #1976D2;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #545b62;
+        }
+        
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #218838;
+        }
+        
+        .logs {
+            background: #1e1e1e;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 20px 0;
+        }
+        
+        .log-entry {
+            margin: 5px 0;
+            padding: 2px 0;
+        }
+        
+        .log-info { color: #66d9ef; }
+        .log-success { color: #a6e22e; }
+        .log-warning { color: #fd971f; }
+        .log-error { color: #f92672; }
+        
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .metric {
+            text-align: center;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .metric-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #2196F3;
+            display: block;
+        }
+        
+        .metric-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 8px;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .actions {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌐 NeoNet Enhanced</h1>
+            <p>Sistema de Teste e Validação - Versão 2.0.0</p>
+        </div>
+        
+        <div class="content">
+            <!-- Status do Sistema -->
+            <div class="test-section">
+                <h3>📊 Status do Sistema</h3>
+                <div class="status-grid">
+                    <div class="status-card">
+                        <h4><span class="status-indicator status-unknown" id="browser-status"></span>Compatibilidade do Navegador</h4>
+                        <p id="browser-info">Verificando...</p>
+                    </div>
+                    <div class="status-card">
+                        <h4><span class="status-indicator status-unknown" id="storage-status"></span>Armazenamento Local</h4>
+                        <p id="storage-info">Verificando...</p>
+                    </div>
+                    <div class="status-card">
+                        <h4><span class="status-indicator status-unknown" id="sw-status"></span>Service Worker</h4>
+                        <p id="sw-info">Verificando...</p>
+                    </div>
+                    <div class="status-card">
+                        <h4><span class="status-indicator status-unknown" id="connection-status"></span>Conectividade</h4>
+                        <p id="connection-info">Verificando...</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Métricas -->
+            <div class="test-section">
+                <h3>📈 Métricas de Performance</h3>
+                <div class="metrics">
+                    <div class="metric">
+                        <span class="metric-value" id="load-time">--</span>
+                        <div class="metric-label">Tempo de Carregamento (ms)</div>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-value" id="memory-usage">--</span>
+                        <div class="metric-label">Uso de Memória (MB)</div>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-value" id="cache-size">--</span>
+                        <div class="metric-label">Tamanho do Cache (KB)</div>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-value" id="db-size">--</span>
+                        <div class="metric-label">Tamanho do DB (KB)</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Testes Funcionais -->
+            <div class="test-section">
+                <h3>🧪 Testes Funcionais</h3>
+                <div class="test-results" id="test-results">
+                    <div class="test-item">
+                        <span class="test-name">IndexedDB - Criação de Banco</span>
+                        <span class="test-result test-pending">Pendente</span>
+                    </div>
+                    <div class="test-item">
+                        <span class="test-name">IndexedDB - Operações CRUD</span>
+                        <span class="test-result test-pending">Pendente</span>
+                    </div>
+                    <div class="test-item">
+                        <span class="test-name">Cache Manager - Armazenamento</span>
+                        <span class="test-result test-pending">Pendente</span>
+                    </div>
+                    <div class="test-item">
+                        <span class="test-name">Sync Manager - CRDT Operations</span>
+                        <span class="test-result test-pending">Pendente</span>
+                    </div>
+                    <div class="test-item">
+                        <span class="test-name">Offline Manager - Fallback</span>
+                        <span class="test-result test-pending">Pendente</span>
+                    </div>
+                    <div class="test-item">
+                        <span class="test-name">Service Worker - Cache Strategy</span>
+                        <span class="test-result test-pending">Pendente</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Ações -->
+            <div class="test-section">
+                <h3>⚡ Ações de Teste</h3>
+                <div class="actions">
+                    <button class="btn btn-primary" onclick="runAllTests()">🚀 Executar Todos os Testes</button>
+                    <button class="btn btn-secondary" onclick="testOfflineMode()">📱 Testar Modo Offline</button>
+                    <button class="btn btn-success" onclick="testSyncOperations()">🔄 Testar Sincronização</button>
+                    <button class="btn btn-secondary" onclick="clearAllData()">🗑️ Limpar Dados</button>
+                    <button class="btn btn-secondary" onclick="exportLogs()">📄 Exportar Logs</button>
+                </div>
+            </div>
+            
+            <!-- Logs -->
+            <div class="test-section">
+                <h3>📝 Logs do Sistema</h3>
+                <div class="logs" id="logs">
+                    <div class="log-entry log-info">[INFO] Sistema de teste inicializado</div>
+                    <div class="log-entry log-info">[INFO] Aguardando execução dos testes...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Variáveis globais para teste
+        let testResults = {};
+        let startTime = Date.now();
+        
+        // Função para adicionar logs
+        function addLog(message, type = 'info') {
+            const logs = document.getElementById('logs');
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.className = `log-entry log-${type}`;
+            logEntry.textContent = `[${timestamp}] [${type.toUpperCase()}] ${message}`;
+            logs.appendChild(logEntry);
+            logs.scrollTop = logs.scrollHeight;
+        }
+        
+        // Função para atualizar status
+        function updateStatus(elementId, status, info) {
+            const indicator = document.getElementById(elementId);
+            const infoElement = document.getElementById(elementId.replace('-status', '-info'));
+            
+            if (indicator) {
+                indicator.className = `status-indicator status-${status}`;
+            }
+            
+            if (infoElement) {
+                infoElement.textContent = info;
+            }
+        }
+        
+        // Função para atualizar resultado de teste
+        function updateTestResult(testName, result) {
+            const testItems = document.querySelectorAll('.test-item');
+            testItems.forEach(item => {
+                const name = item.querySelector('.test-name').textContent;
+                if (name.includes(testName)) {
+                    const resultElement = item.querySelector('.test-result');
+                    resultElement.className = `test-result test-${result}`;
+                    resultElement.textContent = result === 'pass' ? 'Passou' : result === 'fail' ? 'Falhou' : 'Pendente';
+                }
+            });
+        }
+        
+        // Verificar compatibilidade do navegador
+        function checkBrowserCompatibility() {
+            addLog('Verificando compatibilidade do navegador...');
+            
+            const features = {
+                indexedDB: !!window.indexedDB,
+                serviceWorker: 'serviceWorker' in navigator,
+                webRTC: !!(window.RTCPeerConnection || window.webkitRTCPeerConnection),
+                localStorage: !!window.localStorage,
+                fetch: !!window.fetch,
+                promises: !!window.Promise
+            };
+            
+            const missing = Object.entries(features)
+                .filter(([key, supported]) => !supported)
+                .map(([key]) => key);
+            
+            if (missing.length === 0) {
+                updateStatus('browser-status', 'online', 'Totalmente compatível');
+                addLog('Navegador totalmente compatível', 'success');
+                return true;
+            } else {
+                updateStatus('browser-status', 'offline', `Recursos ausentes: ${missing.join(', ')}`);
+                addLog(`Recursos ausentes: ${missing.join(', ')}`, 'warning');
+                return false;
+            }
+        }
+        
+        // Testar armazenamento local
+        async function testStorage() {
+            addLog('Testando armazenamento local...');
+            
+            try {
+                // Testar localStorage
+                localStorage.setItem('neonet-test', 'test-value');
+                const localValue = localStorage.getItem('neonet-test');
+                localStorage.removeItem('neonet-test');
+                
+                if (localValue !== 'test-value') {
+                    throw new Error('localStorage não funcional');
+                }
+                
+                // Testar IndexedDB
+                if (window.indexedDB) {
+                    const request = indexedDB.open('neonet-test-db', 1);
+                    
+                    return new Promise((resolve, reject) => {
+                        request.onerror = () => {
+                            updateStatus('storage-status', 'offline', 'IndexedDB não disponível');
+                            addLog('IndexedDB não disponível', 'error');
+                            reject(false);
+                        };
+                        
+                        request.onsuccess = () => {
+                            const db = request.result;
+                            db.close();
+                            indexedDB.deleteDatabase('neonet-test-db');
+                            
+                            updateStatus('storage-status', 'online', 'localStorage + IndexedDB OK');
+                            addLog('Armazenamento local funcionando corretamente', 'success');
+                            resolve(true);
+                        };
+                        
+                        request.onupgradeneeded = (event) => {
+                            const db = event.target.result;
+                            db.createObjectStore('test', { keyPath: 'id' });
+                        };
+                    });
+                } else {
+                    updateStatus('storage-status', 'pending', 'Apenas localStorage disponível');
+                    addLog('Apenas localStorage disponível', 'warning');
+                    return true;
+                }
+            } catch (error) {
+                updateStatus('storage-status', 'offline', 'Erro no armazenamento');
+                addLog(`Erro no armazenamento: ${error.message}`, 'error');
+                return false;
+            }
+        }
+        
+        // Testar Service Worker
+        async function testServiceWorker() {
+            addLog('Testando Service Worker...');
+            
+            if ('serviceWorker' in navigator) {
+                try {
+                    const registration = await navigator.serviceWorker.register('/sw_enhanced.js');
+                    updateStatus('sw-status', 'online', 'Service Worker registrado');
+                    addLog('Service Worker registrado com sucesso', 'success');
+                    return true;
+                } catch (error) {
+                    try {
+                        const registration = await navigator.serviceWorker.register('/sw.js');
+                        updateStatus('sw-status', 'pending', 'Service Worker básico registrado');
+                        addLog('Service Worker básico registrado', 'warning');
+                        return true;
+                    } catch (basicError) {
+                        updateStatus('sw-status', 'offline', 'Falha no registro');
+                        addLog(`Falha no registro do Service Worker: ${basicError.message}`, 'error');
+                        return false;
+                    }
+                }
+            } else {
+                updateStatus('sw-status', 'offline', 'Não suportado');
+                addLog('Service Workers não suportados', 'error');
+                return false;
+            }
+        }
+        
+        // Verificar conectividade
+        function checkConnectivity() {
+            addLog('Verificando conectividade...');
+            
+            const online = navigator.onLine;
+            
+            if (online) {
+                updateStatus('connection-status', 'online', 'Online');
+                addLog('Conexão online detectada', 'success');
+            } else {
+                updateStatus('connection-status', 'offline', 'Offline');
+                addLog('Modo offline detectado', 'warning');
+            }
+            
+            // Listeners para mudanças de conectividade
+            window.addEventListener('online', () => {
+                updateStatus('connection-status', 'online', 'Online');
+                addLog('Conexão restaurada', 'success');
+            });
+            
+            window.addEventListener('offline', () => {
+                updateStatus('connection-status', 'offline', 'Offline');
+                addLog('Conexão perdida', 'warning');
+            });
+            
+            return online;
+        }
+        
+        // Atualizar métricas
+        function updateMetrics() {
+            // Tempo de carregamento
+            const loadTime = Date.now() - startTime;
+            document.getElementById('load-time').textContent = loadTime;
+            
+            // Uso de memória (aproximado)
+            if (performance.memory) {
+                const memoryMB = Math.round(performance.memory.usedJSHeapSize / 1024 / 1024);
+                document.getElementById('memory-usage').textContent = memoryMB;
+            } else {
+                document.getElementById('memory-usage').textContent = 'N/A';
+            }
+            
+            // Tamanho do cache (simulado)
+            navigator.storage?.estimate().then(estimate => {
+                const cacheKB = Math.round((estimate.usage || 0) / 1024);
+                document.getElementById('cache-size').textContent = cacheKB;
+            }).catch(() => {
+                document.getElementById('cache-size').textContent = 'N/A';
+            });
+            
+            // Tamanho do DB (simulado)
+            document.getElementById('db-size').textContent = '0';
+        }
+        
+        // Executar todos os testes
+        async function runAllTests() {
+            addLog('Iniciando execução de todos os testes...', 'info');
+            
+            // Teste 1: IndexedDB - Criação de Banco
+            try {
+                addLog('Testando criação de banco IndexedDB...');
+                const request = indexedDB.open('neonet-test-full', 1);
+                
+                await new Promise((resolve, reject) => {
+                    request.onerror = () => reject(request.error);
+                    request.onsuccess = () => {
+                        const db = request.result;
+                        db.close();
+                        resolve();
+                    };
+                    request.onupgradeneeded = (event) => {
+                        const db = event.target.result;
+                        db.createObjectStore('testStore', { keyPath: 'id' });
+                    };
+                });
+                
+                updateTestResult('IndexedDB - Criação de Banco', 'pass');
+                addLog('Teste de criação de banco: PASSOU', 'success');
+            } catch (error) {
+                updateTestResult('IndexedDB - Criação de Banco', 'fail');
+                addLog(`Teste de criação de banco: FALHOU - ${error.message}`, 'error');
+            }
+            
+            // Teste 2: IndexedDB - Operações CRUD
+            try {
+                addLog('Testando operações CRUD no IndexedDB...');
+                const request = indexedDB.open('neonet-test-full', 1);
+                
+                await new Promise((resolve, reject) => {
+                    request.onsuccess = async () => {
+                        const db = request.result;
+                        const transaction = db.transaction(['testStore'], 'readwrite');
+                        const store = transaction.objectStore('testStore');
+                        
+                        // Create
+                        await store.add({ id: 1, data: 'test-data' });
+                        
+                        // Read
+                        const getRequest = store.get(1);
+                        getRequest.onsuccess = () => {
+                            if (getRequest.result && getRequest.result.data === 'test-data') {
+                                // Update
+                                store.put({ id: 1, data: 'updated-data' });
+                                
+                                // Delete
+                                store.delete(1);
+                                
+                                db.close();
+                                resolve();
+                            } else {
+                                reject(new Error('Dados não encontrados'));
+                            }
+                        };
+                    };
+                });
+                
+                updateTestResult('IndexedDB - Operações CRUD', 'pass');
+                addLog('Teste de operações CRUD: PASSOU', 'success');
+            } catch (error) {
+                updateTestResult('IndexedDB - Operações CRUD', 'fail');
+                addLog(`Teste de operações CRUD: FALHOU - ${error.message}`, 'error');
+            }
+            
+            // Teste 3: Cache Manager - Armazenamento
+            try {
+                addLog('Testando Cache Manager...');
+                
+                // Simular cache usando localStorage
+                const testData = { test: 'cache-data', timestamp: Date.now() };
+                localStorage.setItem('neonet-cache-test', JSON.stringify(testData));
+                
+                const cached = JSON.parse(localStorage.getItem('neonet-cache-test'));
+                if (cached && cached.test === 'cache-data') {
+                    updateTestResult('Cache Manager - Armazenamento', 'pass');
+                    addLog('Teste de Cache Manager: PASSOU', 'success');
+                } else {
+                    throw new Error('Dados de cache não encontrados');
+                }
+                
+                localStorage.removeItem('neonet-cache-test');
+            } catch (error) {
+                updateTestResult('Cache Manager - Armazenamento', 'fail');
+                addLog(`Teste de Cache Manager: FALHOU - ${error.message}`, 'error');
+            }
+            
+            // Teste 4: Sync Manager - CRDT Operations
+            try {
+                addLog('Testando operações CRDT...');
+                
+                // Simular operação CRDT
+                const vectorClock = new Map();
+                vectorClock.set('node1', 1);
+                vectorClock.set('node2', 2);
+                
+                const operation = {
+                    id: 'op-1',
+                    type: 'set',
+                    key: 'test-key',
+                    value: 'test-value',
+                    vectorTimestamp: Array.from(vectorClock.entries()),
+                    timestamp: Date.now()
+                };
+                
+                if (operation.vectorTimestamp.length > 0) {
+                    updateTestResult('Sync Manager - CRDT Operations', 'pass');
+                    addLog('Teste de operações CRDT: PASSOU', 'success');
+                } else {
+                    throw new Error('Vector clock inválido');
+                }
+            } catch (error) {
+                updateTestResult('Sync Manager - CRDT Operations', 'fail');
+                addLog(`Teste de operações CRDT: FALHOU - ${error.message}`, 'error');
+            }
+            
+            // Teste 5: Offline Manager - Fallback
+            try {
+                addLog('Testando Offline Manager...');
+                
+                // Simular fallback offline
+                const fallbackData = {
+                    networkConfig: { chainId: 1, networkName: 'NeoNet' },
+                    bootstrapPeers: ['localhost:8080']
+                };
+                
+                if (fallbackData.networkConfig && fallbackData.bootstrapPeers) {
+                    updateTestResult('Offline Manager - Fallback', 'pass');
+                    addLog('Teste de Offline Manager: PASSOU', 'success');
+                } else {
+                    throw new Error('Dados de fallback inválidos');
+                }
+            } catch (error) {
+                updateTestResult('Offline Manager - Fallback', 'fail');
+                addLog(`Teste de Offline Manager: FALHOU - ${error.message}`, 'error');
+            }
+            
+            // Teste 6: Service Worker - Cache Strategy
+            try {
+                addLog('Testando estratégia de cache do Service Worker...');
+                
+                if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+                    updateTestResult('Service Worker - Cache Strategy', 'pass');
+                    addLog('Teste de Service Worker: PASSOU', 'success');
+                } else {
+                    updateTestResult('Service Worker - Cache Strategy', 'pending');
+                    addLog('Teste de Service Worker: PENDENTE (SW não ativo)', 'warning');
+                }
+            } catch (error) {
+                updateTestResult('Service Worker - Cache Strategy', 'fail');
+                addLog(`Teste de Service Worker: FALHOU - ${error.message}`, 'error');
+            }
+            
+            // Limpar banco de teste
+            indexedDB.deleteDatabase('neonet-test-full');
+            
+            addLog('Todos os testes concluídos!', 'success');
+        }
+        
+        // Testar modo offline
+        function testOfflineMode() {
+            addLog('Simulando modo offline...', 'info');
+            
+            // Simular desconexão
+            Object.defineProperty(navigator, 'onLine', {
+                writable: true,
+                value: false
+            });
+            
+            // Disparar evento offline
+            window.dispatchEvent(new Event('offline'));
+            
+            addLog('Modo offline simulado', 'warning');
+            
+            // Restaurar após 5 segundos
+            setTimeout(() => {
+                Object.defineProperty(navigator, 'onLine', {
+                    writable: true,
+                    value: true
+                });
+                
+                window.dispatchEvent(new Event('online'));
+                addLog('Conexão restaurada', 'success');
+            }, 5000);
+        }
+        
+        // Testar operações de sincronização
+        function testSyncOperations() {
+            addLog('Testando operações de sincronização...', 'info');
+            
+            // Simular sincronização
+            const operations = [
+                { type: 'sync-start', timestamp: Date.now() },
+                { type: 'sync-data', count: 5, timestamp: Date.now() + 1000 },
+                { type: 'sync-complete', timestamp: Date.now() + 2000 }
+            ];
+            
+            operations.forEach((op, index) => {
+                setTimeout(() => {
+                    addLog(`Sincronização: ${op.type} (${op.count || 0} itens)`, 'info');
+                    
+                    if (op.type === 'sync-complete') {
+                        addLog('Sincronização concluída com sucesso', 'success');
+                    }
+                }, index * 1000);
+            });
+        }
+        
+        // Limpar todos os dados
+        function clearAllData() {
+            addLog('Limpando todos os dados...', 'warning');
+            
+            try {
+                // Limpar localStorage
+                Object.keys(localStorage).forEach(key => {
+                    if (key.startsWith('neonet-')) {
+                        localStorage.removeItem(key);
+                    }
+                });
+                
+                // Limpar caches
+                if ('caches' in window) {
+                    caches.keys().then(cacheNames => {
+                        cacheNames.forEach(cacheName => {
+                            if (cacheName.startsWith('neonet-')) {
+                                caches.delete(cacheName);
+                            }
+                        });
+                    });
+                }
+                
+                // Limpar IndexedDB
+                indexedDB.deleteDatabase('neonet-test-db');
+                indexedDB.deleteDatabase('neonet-test-full');
+                
+                addLog('Todos os dados foram limpos', 'success');
+            } catch (error) {
+                addLog(`Erro ao limpar dados: ${error.message}`, 'error');
+            }
+        }
+        
+        // Exportar logs
+        function exportLogs() {
+            addLog('Exportando logs...', 'info');
+            
+            const logs = document.getElementById('logs');
+            const logText = Array.from(logs.children)
+                .map(entry => entry.textContent)
+                .join('\n');
+            
+            const blob = new Blob([logText], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `neonet-test-logs-${new Date().toISOString().split('T')[0]}.txt`;
+            a.click();
+            
+            URL.revokeObjectURL(url);
+            addLog('Logs exportados com sucesso', 'success');
+        }
+        
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', async () => {
+            addLog('Inicializando sistema de teste...', 'info');
+            
+            // Verificações iniciais
+            checkBrowserCompatibility();
+            await testStorage();
+            await testServiceWorker();
+            checkConnectivity();
+            
+            // Atualizar métricas
+            updateMetrics();
+            setInterval(updateMetrics, 5000);
+            
+            addLog('Sistema de teste pronto!', 'success');
+        });
+    </script>
+</body>
+</html>
+

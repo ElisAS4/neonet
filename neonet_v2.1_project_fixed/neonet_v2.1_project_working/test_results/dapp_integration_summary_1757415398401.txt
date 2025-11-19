@@ -1,0 +1,43 @@
+dApp Integration Test Report
+Generated: 2025-09-09T10:56:38.400Z
+===============================
+
+Test Configuration:
+- Mock dApps: 0
+- Test Timeout: 30 seconds
+
+Overall Results:
+- Total Tests: 7
+- Passed Tests: 2
+- Success Rate: 28.57%
+- Total Duration: 0.0 seconds
+
+Individual Test Results:
+
+dApp Loading and Initialization:
+  Duration: 0.0 seconds
+  Success Rate: 0%
+
+SDK API Functionality:
+  Duration: 0.0 seconds
+  APIs Passed: 7/7
+
+Permission System:
+  Duration: 0.0 seconds
+  Tests Passed: 1/4
+
+Sandboxing and Isolation:
+  Duration: 0.0 seconds
+  Tests Passed: 2/4
+
+Inter-dApp Communication:
+  Duration: 0.0 seconds
+  Tests Passed: 3/3
+
+dApp Lifecycle Management:
+  Duration: 0.0 seconds
+  Tests Passed: 0/3
+
+Error Handling and Recovery:
+  Duration: 0.0 seconds
+  Tests Passed: 2/3

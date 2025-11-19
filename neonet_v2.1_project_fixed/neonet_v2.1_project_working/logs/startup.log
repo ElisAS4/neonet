@@ -1,0 +1,58 @@
+
+> neonet-client@1.0.0 build
+> webpack --mode production
+
+assets by path mock-dapps/ 38.2 KiB
+  assets by path mock-dapps/neonet-videos/ 20.5 KiB
+    asset mock-dapps/neonet-videos/index.html 14.9 KiB [compared for emit] [from: mock-dapps/neonet-videos/index.html] [copied]
+    asset mock-dapps/neonet-videos/videos_scalable.js 5.61 KiB [compared for emit] [from: mock-dapps/neonet-videos/videos_scalable.js] [copied] [minimized]
+  assets by path mock-dapps/neonet-chat/ 17.7 KiB
+    asset mock-dapps/neonet-chat/index.html 13.4 KiB [compared for emit] [from: mock-dapps/neonet-chat/index.html] [copied]
+    asset mock-dapps/neonet-chat/chat_scalable.js 4.29 KiB [compared for emit] [from: mock-dapps/neonet-chat/chat_scalable.js] [copied] [minimized]
+asset bundle.js 114 KiB [compared for emit] [minimized] (name: main) 1 related asset
+asset index_scalable.html 32.2 KiB [compared for emit]
+asset src/utils/PeerManager_scalable.js 5.87 KiB [compared for emit] [from: src/utils/PeerManager_scalable.js] [copied] [minimized]
+orphan modules 57.2 KiB [orphan] 24 modules
+runtime modules 884 bytes 4 modules
+modules by path ./ 275 KiB
+  modules by path ./node_modules/readable-stream/ 97.1 KiB
+    modules by path ./node_modules/readable-stream/lib/ 92.5 KiB 13 modules
+    modules by path ./node_modules/readable-stream/*.js 4.58 KiB
+      ./node_modules/readable-stream/readable-browser.js 488 bytes [built] [code generated]
+      ./node_modules/readable-stream/errors-browser.js 4.1 KiB [built] [code generated]
+  modules by path ./node_modules/debug/src/*.js 12.7 KiB
+    ./node_modules/debug/src/browser.js 5.96 KiB [built] [code generated]
+    ./node_modules/debug/src/common.js 6.75 KiB [built] [code generated]
+  + 15 modules
+util (ignored) 15 bytes [built] [code generated]
+util (ignored) 15 bytes [built] [code generated]
+webpack 5.101.3 compiled successfully in 3612 ms
+
+> neonet-client@1.0.0 build
+> webpack --mode production
+
+assets by path mock-dapps/ 38.2 KiB
+  assets by path mock-dapps/neonet-videos/ 20.5 KiB
+    asset mock-dapps/neonet-videos/index.html 14.9 KiB [compared for emit] [from: mock-dapps/neonet-videos/index.html] [copied]
+    asset mock-dapps/neonet-videos/videos_scalable.js 5.61 KiB [compared for emit] [from: mock-dapps/neonet-videos/videos_scalable.js] [copied] [minimized]
+  assets by path mock-dapps/neonet-chat/ 17.7 KiB
+    asset mock-dapps/neonet-chat/index.html 13.4 KiB [compared for emit] [from: mock-dapps/neonet-chat/index.html] [copied]
+    asset mock-dapps/neonet-chat/chat_scalable.js 4.29 KiB [compared for emit] [from: mock-dapps/neonet-chat/chat_scalable.js] [copied] [minimized]
+asset bundle.js 114 KiB [compared for emit] [minimized] (name: main) 1 related asset
+asset index_scalable.html 32.2 KiB [compared for emit]
+asset src/utils/PeerManager_scalable.js 5.87 KiB [compared for emit] [from: src/utils/PeerManager_scalable.js] [copied] [minimized]
+orphan modules 57.2 KiB [orphan] 24 modules
+runtime modules 884 bytes 4 modules
+modules by path ./ 275 KiB
+  modules by path ./node_modules/readable-stream/ 97.1 KiB
+    modules by path ./node_modules/readable-stream/lib/ 92.5 KiB 13 modules
+    modules by path ./node_modules/readable-stream/*.js 4.58 KiB
+      ./node_modules/readable-stream/readable-browser.js 488 bytes [built] [code generated]
+      ./node_modules/readable-stream/errors-browser.js 4.1 KiB [built] [code generated]
+  modules by path ./node_modules/debug/src/*.js 12.7 KiB
+    ./node_modules/debug/src/browser.js 5.96 KiB [built] [code generated]
+    ./node_modules/debug/src/common.js 6.75 KiB [built] [code generated]
+  + 15 modules
+util (ignored) 15 bytes [built] [code generated]
+util (ignored) 15 bytes [built] [code generated]
+webpack 5.101.3 compiled successfully in 3600 ms

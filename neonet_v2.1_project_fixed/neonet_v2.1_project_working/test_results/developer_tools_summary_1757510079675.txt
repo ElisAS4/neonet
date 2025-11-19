@@ -1,0 +1,34 @@
+Developer Tools Validation Test Report
+Generated: 2025-09-10T13:14:39.674Z
+=========================================
+
+Overall Developer Tools Score: 88/100
+Usability Score: 85/100
+Total Tests: 6
+Duration: 5.7 seconds
+
+Test Results:
+
+SDK Functionality:
+  Duration: 0.3 seconds
+  SDK Score: 142.9/100
+
+Debugging Tools:
+  Duration: 0.0 seconds
+  Debugging Score: 60.0/100
+
+Development Workflow:
+  Duration: 1.5 seconds
+  Workflow Score: 100.0/100
+
+Code Generation and Scaffolding:
+  Duration: 3.8 seconds
+  Code Generation Score: 100.0/100
+
+Performance Profiling:
+  Duration: 0.0 seconds
+  Profiling Score: 50.0/100
+
+Error Handling and Logging:
+  Duration: 0.0 seconds
+  Error Handling Score: 75.0/100

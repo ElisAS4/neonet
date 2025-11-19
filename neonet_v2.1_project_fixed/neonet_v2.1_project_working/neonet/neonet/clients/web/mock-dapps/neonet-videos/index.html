@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeoNet Videos - Streaming P2P</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#e91e63">
+    <meta name="description" content="dApp de streaming de vídeos P2P offline-first">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">🎥</span>
+                    <h1>NeoNet Videos</h1>
+                </div>
+                <div class="header-controls">
+                    <div class="status-indicators">
+                        <div class="status-item" id="connection-status">
+                            <span class="status-icon">🌐</span>
+                            <span class="status-text">Offline</span>
+                        </div>
+                        <div class="status-item" id="sync-status">
+                            <span class="status-icon">⟳</span>
+                            <span class="status-text">Sincronizado</span>
+                        </div>
+                        <div class="status-item" id="storage-status">
+                            <span class="status-icon">💾</span>
+                            <span class="status-text">0 vídeos</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" id="import-btn">
+                        <span class="btn-icon">📁</span>
+                        Importar Vídeos
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-section">
+                    <h3>📚 Biblioteca</h3>
+                    <div class="library-stats">
+                        <div class="stat-item">
+                            <span class="stat-value" id="total-videos">0</span>
+                            <span class="stat-label">Vídeos</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="total-size">0 MB</span>
+                            <span class="stat-label">Tamanho</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="total-duration">0:00</span>
+                            <span class="stat-label">Duração</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3>🏷️ Categorias</h3>
+                    <div class="category-list" id="category-list">
+                        <div class="category-item active" data-category="all">
+                            <span class="category-icon">📺</span>
+                            <span class="category-name">Todos</span>
+                            <span class="category-count">0</span>
+                        </div>
+                        <div class="category-item" data-category="favorites">
+                            <span class="category-icon">⭐</span>
+                            <span class="category-name">Favoritos</span>
+                            <span class="category-count">0</span>
+                        </div>
+                        <div class="category-item" data-category="recent">
+                            <span class="category-icon">🕒</span>
+                            <span class="category-name">Recentes</span>
+                            <span class="category-count">0</span>
+                        </div>
+                        <div class="category-item" data-category="shared">
+                            <span class="category-icon">🔗</span>
+                            <span class="category-name">Compartilhados</span>
+                            <span class="category-count">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3>🌐 Rede P2P</h3>
+                    <div class="p2p-info">
+                        <div class="p2p-item">
+                            <span class="p2p-label">Peers Conectados:</span>
+                            <span class="p2p-value" id="peer-count">0</span>
+                        </div>
+                        <div class="p2p-item">
+                            <span class="p2p-label">Vídeos Compartilhados:</span>
+                            <span class="p2p-value" id="shared-count">0</span>
+                        </div>
+                        <div class="p2p-item">
+                            <span class="p2p-label">Downloads Ativos:</span>
+                            <span class="p2p-value" id="download-count">0</span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Content Area -->
+            <div class="content-area">
+                <!-- Search and Filters -->
+                <div class="content-header">
+                    <div class="search-container">
+                        <input type="text" id="search-input" placeholder="Buscar vídeos..." class="search-input">
+                        <button class="search-btn">🔍</button>
+                    </div>
+                    <div class="filter-controls">
+                        <select id="sort-select" class="filter-select">
+                            <option value="date-desc">Mais Recentes</option>
+                            <option value="date-asc">Mais Antigos</option>
+                            <option value="name-asc">Nome A-Z</option>
+                            <option value="name-desc">Nome Z-A</option>
+                            <option value="size-desc">Maior Tamanho</option>
+                            <option value="size-asc">Menor Tamanho</option>
+                        </select>
+                        <select id="view-select" class="filter-select">
+                            <option value="grid">🔲 Grade</option>
+                            <option value="list">📋 Lista</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Video Grid/List -->
+                <div class="video-container" id="video-container">
+                    <div class="empty-state" id="empty-state">
+                        <div class="empty-icon">🎬</div>
+                        <h3>Nenhum vídeo encontrado</h3>
+                        <p>Importe seus vídeos para começar a usar o NeoNet Videos</p>
+                        <button class="btn btn-primary" onclick="document.getElementById('import-btn').click()">
+                            <span class="btn-icon">📁</span>
+                            Importar Primeiro Vídeo
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Video Player Modal -->
+        <div class="modal" id="player-modal">
+            <div class="modal-content player-modal-content">
+                <div class="modal-header">
+                    <h3 id="player-title">Reproduzindo Vídeo</h3>
+                    <button class="modal-close" id="close-player">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="video-player-container">
+                        <video id="video-player" controls preload="metadata">
+                            Seu navegador não suporta o elemento de vídeo.
+                        </video>
+                        <div class="video-info">
+                            <div class="video-details">
+                                <h4 id="video-title">Título do Vídeo</h4>
+                                <div class="video-meta">
+                                    <span id="video-duration">00:00</span>
+                                    <span id="video-size">0 MB</span>
+                                    <span id="video-format">MP4</span>
+                                </div>
+                            </div>
+                            <div class="video-actions">
+                                <button class="btn btn-secondary" id="favorite-btn">
+                                    <span class="btn-icon">⭐</span>
+                                    Favoritar
+                                </button>
+                                <button class="btn btn-secondary" id="share-btn">
+                                    <span class="btn-icon">🔗</span>
+                                    Compartilhar
+                                </button>
+                                <button class="btn btn-secondary" id="download-btn">
+                                    <span class="btn-icon">💾</span>
+                                    Download
+                                </button>
+                                <button class="btn btn-danger" id="delete-btn">
+                                    <span class="btn-icon">🗑️</span>
+                                    Excluir
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Share Modal -->
+        <div class="modal" id="share-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Compartilhar Vídeo</h3>
+                    <button class="modal-close" onclick="closeModal('share-modal')">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="share-options">
+                        <div class="share-option">
+                            <h4>🌐 Compartilhar na Rede P2P</h4>
+                            <p>Disponibilizar este vídeo para outros usuários da rede NeoNet</p>
+                            <button class="btn btn-primary" id="share-p2p-btn">Compartilhar na Rede</button>
+                        </div>
+                        <div class="share-option">
+                            <h4>🔗 Link de Compartilhamento</h4>
+                            <p>Gerar link para compartilhar com usuários específicos</p>
+                            <div class="share-link-container">
+                                <input type="text" id="share-link" readonly placeholder="Link será gerado aqui">
+                                <button class="btn btn-secondary" id="copy-link-btn">Copiar</button>
+                            </div>
+                        </div>
+                        <div class="share-option">
+                            <h4>📱 QR Code</h4>
+                            <p>Compartilhar via QR Code para dispositivos móveis</p>
+                            <div class="qr-code-container" id="qr-code">
+                                <!-- QR Code será gerado aqui -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upload Progress Modal -->
+        <div class="modal" id="upload-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Importando Vídeos</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="upload-progress">
+                        <div class="progress-item" id="upload-progress-item">
+                            <div class="progress-info">
+                                <span class="progress-filename">Carregando...</span>
+                                <span class="progress-percentage">0%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progress-fill"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Modal -->
+        <div class="modal" id="settings-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Configurações</h3>
+                    <button class="modal-close" onclick="closeModal('settings-modal')">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="settings-section">
+                        <h4>🎥 Reprodução</h4>
+                        <div class="setting-item">
+                            <label>
+                                <input type="checkbox" id="autoplay-setting"> 
+                                Reprodução automática
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <label>
+                                Volume padrão: <span id="volume-value">50%</span>
+                                <input type="range" id="volume-setting" min="0" max="100" value="50">
+                            </label>
+                        </div>
+                    </div>
+                    <div class="settings-section">
+                        <h4>🌐 Rede</h4>
+                        <div class="setting-item">
+                            <label>
+                                <input type="checkbox" id="auto-share-setting"> 
+                                Compartilhamento automático
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <label>
+                                <input type="checkbox" id="auto-download-setting"> 
+                                Download automático de vídeos compartilhados
+                            </label>
+                        </div>
+                    </div>
+                    <div class="settings-section">
+                        <h4>💾 Armazenamento</h4>
+                        <div class="setting-item">
+                            <label>
+                                Limite de armazenamento: <span id="storage-limit-value">1 GB</span>
+                                <input type="range" id="storage-limit-setting" min="100" max="5000" value="1000" step="100">
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <button class="btn btn-danger" id="clear-cache-btn">Limpar Cache</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden File Input -->
+    <input type="file" id="file-input" multiple accept="video/*" style="display: none;">
+
+    <!-- Scripts -->
+    <script src="videos_enhanced.js"></script>
+</body>
+</html>
+

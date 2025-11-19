@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeoNet Notes</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <div class="notes-container">
+        <div class="notes-header">
+            <h1>📝 NeoNet Notes</h1>
+            <div class="header-actions">
+                <button id="newNoteBtn" class="btn btn-primary">Nova Nota</button>
+                <div class="sync-status">
+                    <span class="sync-indicator" id="syncStatus"></span>
+                    <span id="syncText">Sincronizado</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="notes-content">
+            <div class="notes-sidebar">
+                <div class="search-container">
+                    <input type="text" id="searchInput" placeholder="Buscar notas...">
+                </div>
+                <div class="notes-list" id="notesList">
+                    <div class="empty-state">
+                        <p>Nenhuma nota encontrada</p>
+                        <small>Clique em "Nova Nota" para começar</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="note-editor" id="noteEditor">
+                <div class="editor-header">
+                    <input type="text" id="noteTitle" placeholder="Título da nota..." maxlength="100">
+                    <div class="editor-actions">
+                        <button id="saveBtn" class="btn btn-success">Salvar</button>
+                        <button id="deleteBtn" class="btn btn-danger">Excluir</button>
+                    </div>
+                </div>
+                <textarea id="noteContent" placeholder="Escreva sua nota aqui..."></textarea>
+                <div class="editor-footer">
+                    <small id="noteInfo">Última modificação: nunca</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="notes.js"></script>
+</body>
+</html>
+

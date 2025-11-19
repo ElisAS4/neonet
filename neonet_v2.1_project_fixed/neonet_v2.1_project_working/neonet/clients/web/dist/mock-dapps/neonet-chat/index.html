@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeoNet Chat - Conversa Privada P2P</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, \'Helvetica Neue\', Arial, sans-serif;
+            background-color: #282c34;
+            color: white;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .chat-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #21252b;
+            padding: 15px;
+            border-right: 1px solid #3a3f47;
+            display: flex;
+            flex-direction: column;
+        }
+        .sidebar h2 {
+            color: #61dafb;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+        .peer-list {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 15px;
+        }
+        .peer-item {
+            padding: 10px;
+            margin-bottom: 5px;
+            background-color: #3a3f47;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .peer-item:hover {
+            background-color: #4a4f57;
+        }
+        .peer-item.active {
+            background-color: #61dafb;
+            color: #282c34;
+            font-weight: bold;
+        }
+        .peer-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #007bff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+        .chat-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: #282c34;
+        }
+        .chat-header {
+            background-color: #21252b;
+            padding: 15px;
+            border-bottom: 1px solid #3a3f47;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        .messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+        .message-bubble {
+            max-width: 70%;
+            padding: 10px 15px;
+            border-radius: 15px;
+            margin-bottom: 10px;
+            word-wrap: break-word;
+        }
+        .message-bubble.sent {
+            background-color: #61dafb;
+            color: #282c34;
+            align-self: flex-end;
+            border-bottom-right-radius: 2px;
+        }
+        .message-bubble.received {
+            background-color: #3a3f47;
+            color: white;
+            align-self: flex-start;
+            border-bottom-left-radius: 2px;
+        }
+        .message-sender {
+            font-size: 0.8rem;
+            opacity: 0.7;
+            margin-bottom: 5px;
+        }
+        .message-input-area {
+            display: flex;
+            padding: 15px;
+            background-color: #21252b;
+            border-top: 1px solid #3a3f47;
+        }
+        .message-input-area input {
+            flex: 1;
+            padding: 10px 15px;
+            border-radius: 20px;
+            border: 1px solid #3a3f47;
+            background-color: #282c34;
+            color: white;
+            font-size: 1rem;
+            margin-right: 10px;
+        }
+        .message-input-area input:focus {
+            outline: none;
+            border-color: #61dafb;
+        }
+        .message-input-area button {
+            background-color: #61dafb;
+            color: #282c34;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: background-color 0.2s ease;
+        }
+        .message-input-area button:hover {
+            background-color: #21a1f1;
+        }
+        .message-input-area button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .user-info {
+            padding: 10px;
+            background-color: #3a3f47;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+        .user-info p {
+            margin: 5px 0;
+        }
+        @media (max-width: 768px) {
+            .chat-container {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                height: 200px;
+                border-right: none;
+                border-bottom: 1px solid #3a3f47;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="sidebar">
+            <h2>NeoNet Chat</h2>
+            <div class="user-info">
+                <p>Você: <span id="myUserName"></span></p>
+                <p>ID: <span id="myNodeId"></span></p>
+            </div>
+            <div class="peer-list" id="peerList">
+                <!-- Peers will be loaded here -->
+                <div style="text-align: center; padding: 20px; opacity: 0.7;">Nenhum peer conectado.</div>
+            </div>
+        </div>
+        <div class="chat-main">
+            <div class="chat-header" id="chatHeader">Selecione um peer para conversar</div>
+            <div class="messages" id="messages">
+                <!-- Messages will be loaded here -->
+            </div>
+            <div class="message-input-area">
+                <input type="text" id="messageInput" placeholder="Digite sua mensagem..." disabled>
+                <button id="sendMessageBtn" disabled>Enviar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../src/utils/PeerManager_scalable.js"></script>
+    <script>
+        const myNodeIdSpan = document.getElementById("myNodeId");
+        const myUserNameSpan = document.getElementById("myUserName");
+        const peerListDiv = document.getElementById("peerList");
+        const chatHeaderDiv = document.getElementById("chatHeader");
+        const messagesDiv = document.getElementById("messages");
+        const messageInput = document.getElementById("messageInput");
+        const sendMessageBtn = document.getElementById("sendMessageBtn");
+
+        let peerManager;
+        let myNodeId;
+        let myUserName;
+        let activePeerId = null;
+        const chatHistory = new Map(); // Map<peerId, [{ sender: string, message: string, timestamp: number }]>
+
+        document.addEventListener("DOMContentLoaded", () => {
+            // Get my user info from localStorage (set by main index.html)
+            myNodeId = localStorage.getItem("neonet_node_id");
+            myUserName = localStorage.getItem("neonet_user_name");
+
+            if (!myNodeId || !myUserName) {
+                alert("Por favor, conecte-se à rede NeoNet na página principal primeiro e defina seu nome.");
+                window.close();
+                return;
+            }
+
+            myNodeIdSpan.textContent = myNodeId.substring(0, 8) + "...";
+            myUserNameSpan.textContent = myUserName;
+
+            peerManager = new PeerManagerScalable({
+                signalingServerUrl: "ws://localhost:8080", // Use o mesmo servidor de sinalização
+                onPeerJoined: handlePeerJoined,
+                onPeerLeft: handlePeerLeft,
+                onConnectionStatusChanged: handleConnectionStatusChanged,
+                onMessage: handlePeerMessage
+            });
+
+            // Connect to the network if not already connected
+            // This dApp assumes the main app already connected, but can connect independently
+            peerManager.connect({ userName: myUserName, userBio: localStorage.getItem("neonet_user_bio") || "" });
+
+            sendMessageBtn.addEventListener("click", sendMessage);
+            messageInput.addEventListener("keypress", (e) => {
+                if (e.key === "Enter") {
+                    sendMessage();
+                }
+            });
+        });
+
+        function handlePeerJoined(peer) {
+            console.log("[Chat] Peer Joined:", peer);
+            updatePeerList();
+        }
+
+        function handlePeerLeft(peer) {
+            console.log("[Chat] Peer Left:", peer);
+            if (activePeerId === peer.nodeId) {
+                activePeerId = null;
+                chatHeaderDiv.textContent = "Selecione um peer para conversar";
+                messagesDiv.innerHTML = "";
+                messageInput.disabled = true;
+                sendMessageBtn.disabled = true;
+            }
+            updatePeerList();
+        }
+
+        function handleConnectionStatusChanged(status) {
+            console.log("[Chat] Connection Status:", status);
+            if (status === "disconnected") {
+                alert("Desconectado do servidor de sinalização. Por favor, reconecte na página principal.");
+                // Optionally, close the dApp or disable functionality
+            }
+        }
+
+        function handlePeerMessage(senderId, message) {
+            console.log("[Chat] Message from", senderId, ":", message);
+            if (message.type === "chat_message") {
+                addMessageToHistory(senderId, { sender: peerManager.getPeerMetadata(senderId)?.userName || senderId.substring(0, 8) + "...", message: message.text, timestamp: Date.now() });
+                if (activePeerId === senderId) {
+                    displayMessage({ sender: peerManager.getPeerMetadata(senderId)?.userName || senderId.substring(0, 8) + "...", message: message.text, timestamp: Date.now() }, "received");
+                }
+            }
+        }
+
+        function updatePeerList() {
+            const peers = peerManager.getAllKnownPeers().filter(p => p.nodeId !== myNodeId);
+            peerListDiv.innerHTML = "";
+            if (peers.length === 0) {
+                peerListDiv.innerHTML = 
+                    `<div style="text-align: center; padding: 20px; opacity: 0.7;">Nenhum peer conectado.</div>`;
+                return;
+            }
+
+            peers.forEach(peer => {
+                const peerItem = document.createElement("div");
+                peerItem.className = `peer-item ${activePeerId === peer.nodeId ? "active" : ""}`;
+                peerItem.innerHTML = `
+                    <div class="peer-avatar">${peer.userName.charAt(0).toUpperCase()}</div>
+                    <div>
+                        <div>${escapeHtml(peer.userName)}</div>
+                        <div style="font-size: 0.7rem; opacity: 0.8;">${peer.nodeId.substring(0, 8)}...</div>
+                    </div>
+                `;
+                peerItem.onclick = () => selectPeer(peer.nodeId);
+                peerListDiv.appendChild(peerItem);
+            });
+        }
+
+        function selectPeer(peerId) {
+            activePeerId = peerId;
+            const peer = peerManager.getPeerMetadata(peerId);
+            chatHeaderDiv.textContent = `Conversando com: ${peer.userName}`;
+            messageInput.disabled = false;
+            sendMessageBtn.disabled = false;
+            displayChatHistory(peerId);
+            updatePeerList(); // Update active state in list
+        }
+
+        function sendMessage() {
+            if (!activePeerId || messageInput.value.trim() === "") return;
+
+            const messageText = messageInput.value.trim();
+            const messagePayload = { type: "chat_message", text: messageText };
+
+            // Send via P2P if connected, otherwise via signaling server
+            const sent = peerManager.sendDataToPeer(activePeerId, messagePayload);
+            
+            if (sent) {
+                addMessageToHistory(activePeerId, { sender: myUserName, message: messageText, timestamp: Date.now() });
+                displayMessage({ sender: myUserName, message: messageText, timestamp: Date.now() }, "sent");
+                messageInput.value = "";
+            } else {
+                alert("Não foi possível enviar a mensagem. Peer offline ou conexão P2P não estabelecida.");
+            }
+        }
+
+        function addMessageToHistory(peerId, message) {
+            if (!chatHistory.has(peerId)) {
+                chatHistory.set(peerId, []);
+            }
+            chatHistory.get(peerId).push(message);
+        }
+
+        function displayChatHistory(peerId) {
+            messagesDiv.innerHTML = "";
+            const history = chatHistory.get(peerId) || [];
+            history.forEach(msg => {
+                const type = msg.sender === myUserName ? "sent" : "received";
+                displayMessage(msg, type);
+            });
+            messagesDiv.scrollTop = messagesDiv.scrollHeight; // Scroll to bottom
+        }
+
+        function displayMessage(msg, type) {
+            const messageBubble = document.createElement("div");
+            messageBubble.className = `message-bubble ${type}`;
+            messageBubble.innerHTML = `
+                <div class="message-sender">${msg.sender} (${new Date(msg.timestamp).toLocaleTimeString()})</div>
+                <div>${escapeHtml(msg.message)}</div>
+            `;
+            messagesDiv.appendChild(messageBubble);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight; // Scroll to bottom
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement("div");
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>
+
+

@@ -1,0 +1,28 @@
+{
+  "name": "NeoNet Notes",
+  "short_name": "Notes",
+  "description": "Aplicativo de notas pessoais com sincronização P2P e criptografia local",
+  "start_url": "/mock-dapps/neonet-notes/index.html",
+  "display": "standalone",
+  "background_color": "#4CAF50",
+  "theme_color": "#4CAF50",
+  "icons": [
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxOTIiIGhlaWdodD0iMTkyIiByeD0iMjQiIGZpbGw9IiM0Q0FGNTAI+CjxzdmcgeD0iNDgiIHk9IjQ4IiB3aWR0aD0iOTYiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPgo8cGF0aCBkPSJNMTQgMmE0IDQgMCAwIDEgNCA0djEyYTQgNCAwIDAgMS00IDRINmE0IDQgMCAwIDEtNC00VjZhNCA0IDAgMCAxIDQtNGg4eiIvPgo8cGF0aCBkPSJNOCA4aDgiLz4KPHN0cm9rZSBkPSJNOCAxMmg4Ii8+CjxwYXRoIGQ9Ik04IDE2aDgiLz4KPC9zdmc+Cjwvc3ZnPg==",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    }
+  ],
+  "permissions": [
+    "storage",
+    "encryption"
+  ],
+  "neonet": {
+    "version": "1.0.0",
+    "offline_capable": true,
+    "p2p_enabled": true,
+    "storage_quota": "50MB",
+    "encryption_required": true
+  }
+}
+

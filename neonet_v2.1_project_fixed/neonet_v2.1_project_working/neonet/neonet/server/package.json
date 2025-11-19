@@ -1,0 +1,16 @@
+{
+  "name": "neonet-signaling-server",
+  "version": "1.0.0",
+  "description": "NeoNet WebSocket Signaling Server",
+  "main": "websocketSignalingServer.js",
+  "scripts": {
+    "start": "node websocketSignalingServer.js"
+  },
+  "keywords": ["websocket", "signaling", "p2p", "webrtc"],
+  "author": "NeoNet Team",
+  "license": "MIT",
+  "dependencies": {
+    "ws": "^8.13.0"
+  }
+}
+

@@ -1,0 +1,13 @@
+{
+  "name": "neonet-ess",
+  "version": "2.1.0",
+  "description": "Enhanced Signaling Server for NeoNet v2.1",
+  "main": "websocketSignalingServer_enhanced.js",
+  "scripts": {
+    "start": "node websocketSignalingServer_enhanced.js"
+  },
+  "dependencies": {
+    "uuid": "^11.1.0",
+    "ws": "^8.18.3"
+  }
+}

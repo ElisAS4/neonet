@@ -1,0 +1,223 @@
+{
+  "timestamp": "2025-09-09T10:56:38.400Z",
+  "testSuite": "dApp Integration Tests",
+  "configuration": {
+    "testDataDir": "./test_data",
+    "outputDir": "./test_results",
+    "mockDAppsDir": "./neonet/clients/web/mock-dapps",
+    "timeout": 30000
+  },
+  "mockDApps": 0,
+  "testResults": [
+    {
+      "testName": "dApp Loading and Initialization",
+      "duration": 0,
+      "results": {
+        "attempted": 0,
+        "successful": 0,
+        "failed": 0,
+        "errors": []
+      },
+      "successRate": "0%"
+    },
+    {
+      "testName": "SDK API Functionality",
+      "duration": 1,
+      "apiTests": [
+        {
+          "api": "Data API",
+          "passed": true,
+          "score": "4/4",
+          "errors": []
+        },
+        {
+          "api": "State API",
+          "passed": true,
+          "score": "4/4",
+          "errors": []
+        },
+        {
+          "api": "Storage API",
+          "passed": true,
+          "score": "4/4",
+          "errors": []
+        },
+        {
+          "api": "P2P API",
+          "passed": true,
+          "score": "4/4",
+          "errors": []
+        },
+        {
+          "api": "Security API",
+          "passed": true,
+          "score": "4/4",
+          "errors": []
+        },
+        {
+          "api": "UI API",
+          "passed": true,
+          "score": "4/4",
+          "errors": []
+        },
+        {
+          "api": "Network API",
+          "passed": true,
+          "score": "4/4",
+          "errors": []
+        }
+      ],
+      "totalAPIs": 7,
+      "passedAPIs": 7,
+      "failedAPIs": 0
+    },
+    {
+      "testName": "Permission System",
+      "duration": 0,
+      "permissionTests": [
+        {
+          "test": "Permission Checking",
+          "passed": false,
+          "score": "3/4",
+          "details": "Checked 4 permissions"
+        },
+        {
+          "test": "Permission Granting",
+          "passed": true,
+          "score": "2/2",
+          "details": "Granted 2 new permissions"
+        },
+        {
+          "test": "Permission Revocation",
+          "passed": false,
+          "score": "0/2",
+          "details": "Revoked 0 permissions"
+        },
+        {
+          "test": "Role-Based Permissions",
+          "passed": false,
+          "score": "2/3",
+          "details": "Validated 2 roles"
+        }
+      ],
+      "totalTests": 4,
+      "passedTests": 1
+    },
+    {
+      "testName": "Sandboxing and Isolation",
+      "duration": 1,
+      "sandboxTests": [
+        {
+          "test": "Resource Isolation",
+          "passed": true,
+          "score": "4/4",
+          "details": "4 resources properly isolated"
+        },
+        {
+          "test": "API Access Control",
+          "passed": true,
+          "score": "3/3",
+          "details": "3 restricted APIs properly blocked"
+        },
+        {
+          "test": "Memory Isolation",
+          "passed": false,
+          "score": "2/3",
+          "details": "2 memory areas properly isolated"
+        },
+        {
+          "test": "Network Isolation",
+          "passed": false,
+          "score": "1/3",
+          "details": "1 network accesses properly controlled"
+        }
+      ],
+      "totalTests": 4,
+      "passedTests": 2
+    },
+    {
+      "testName": "Inter-dApp Communication",
+      "duration": 0,
+      "communicationTests": [
+        {
+          "test": "Message Passing",
+          "passed": true,
+          "score": "5/5",
+          "details": "5 messages passed successfully"
+        },
+        {
+          "test": "Event System",
+          "passed": true,
+          "score": "4/4",
+          "details": "4 event operations working"
+        },
+        {
+          "test": "Shared Data Access",
+          "passed": true,
+          "score": "3/3",
+          "details": "3 shared data operations successful"
+        }
+      ],
+      "totalTests": 3,
+      "passedTests": 3
+    },
+    {
+      "testName": "dApp Lifecycle Management",
+      "duration": 0,
+      "lifecycleTests": [
+        {
+          "test": "dApp Installation",
+          "passed": false,
+          "score": "3/5",
+          "details": "3 installation steps completed"
+        },
+        {
+          "test": "dApp Updates",
+          "passed": false,
+          "score": "4/5",
+          "details": "4 update steps completed"
+        },
+        {
+          "test": "dApp Uninstallation",
+          "passed": false,
+          "score": "3/4",
+          "details": "3 uninstallation steps completed"
+        }
+      ],
+      "totalTests": 3,
+      "passedTests": 0
+    },
+    {
+      "testName": "Error Handling and Recovery",
+      "duration": 0,
+      "errorTests": [
+        {
+          "test": "API Error Handling",
+          "passed": true,
+          "score": "4/4",
+          "details": "4 error scenarios handled properly"
+        },
+        {
+          "test": "Network Error Recovery",
+          "passed": true,
+          "score": "3/3",
+          "details": "3 network errors recovered"
+        },
+        {
+          "test": "Resource Exhaustion Handling",
+          "passed": false,
+          "score": "1/3",
+          "details": "1 resource limits handled properly"
+        }
+      ],
+      "totalTests": 3,
+      "passedTests": 2
+    }
+  ],
+  "summary": {
+    "totalTests": 7,
+    "passedTests": 2,
+    "overallDuration": 2,
+    "successRate": "28.57%"
+  }
+}

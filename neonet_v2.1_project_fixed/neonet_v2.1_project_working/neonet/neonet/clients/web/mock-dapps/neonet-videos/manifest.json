@@ -1,0 +1,156 @@
+{
+  "name": "NeoNet Videos",
+  "short_name": "Videos",
+  "description": "dApp de streaming de vídeos P2P offline-first para NeoNet",
+  "version": "1.0.0",
+  "author": "NeoNet Team",
+  "license": "MIT",
+  "homepage": "https://neonet.io/dapps/videos",
+  "repository": "https://github.com/neonet/neonet-videos",
+  "keywords": ["video", "streaming", "p2p", "offline", "dapp"],
+  
+  "neonet": {
+    "type": "dapp",
+    "category": "media",
+    "permissions": [
+      "storage",
+      "p2p",
+      "filesystem",
+      "camera",
+      "microphone"
+    ],
+    "offline_capable": true,
+    "p2p_enabled": true,
+    "storage_quota": "5GB",
+    "api_version": "2.0"
+  },
+  
+  "pwa": {
+    "name": "NeoNet Videos",
+    "short_name": "Videos",
+    "description": "Streaming de vídeos P2P offline-first",
+    "theme_color": "#e91e63",
+    "background_color": "#ffffff",
+    "display": "standalone",
+    "orientation": "any",
+    "start_url": "./index.html",
+    "scope": "./",
+    "icons": [
+      {
+        "src": "icon-192.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      },
+      {
+        "src": "icon-512.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      }
+    ]
+  },
+  
+  "features": {
+    "video_import": {
+      "supported_formats": ["mp4", "webm", "avi", "mov", "mkv"],
+      "max_file_size": "2GB",
+      "batch_import": true
+    },
+    "video_player": {
+      "controls": true,
+      "fullscreen": true,
+      "picture_in_picture": true,
+      "playback_speed": true,
+      "subtitles": false,
+      "chapters": false
+    },
+    "p2p_sharing": {
+      "auto_discovery": true,
+      "encryption": true,
+      "chunk_size": "1MB",
+      "max_peers": 10
+    },
+    "offline_storage": {
+      "indexeddb": true,
+      "compression": true,
+      "thumbnails": true,
+      "metadata": true
+    },
+    "search_filter": {
+      "text_search": true,
+      "category_filter": true,
+      "date_filter": true,
+      "size_filter": true,
+      "duration_filter": true
+    }
+  },
+  
+  "configuration": {
+    "default_volume": 50,
+    "autoplay": false,
+    "auto_share": false,
+    "auto_download": false,
+    "storage_limit": "1GB",
+    "cache_duration": "7d",
+    "thumbnail_quality": "medium",
+    "video_quality": "auto"
+  },
+  
+  "dependencies": {
+    "neonet_core": ">=2.0.0",
+    "indexeddb": "required",
+    "webrtc": "required",
+    "file_api": "required",
+    "media_api": "required"
+  },
+  
+  "compatibility": {
+    "browsers": {
+      "chrome": ">=80",
+      "firefox": ">=75",
+      "safari": ">=13",
+      "edge": ">=80"
+    },
+    "platforms": {
+      "desktop": true,
+      "mobile": true,
+      "tablet": true
+    }
+  },
+  
+  "security": {
+    "content_security_policy": "default-src 'self'; media-src 'self' blob: data:; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'",
+    "permissions_policy": "camera=(), microphone=(), geolocation=()",
+    "data_encryption": true,
+    "secure_transport": true
+  },
+  
+  "performance": {
+    "lazy_loading": true,
+    "virtual_scrolling": true,
+    "thumbnail_caching": true,
+    "progressive_loading": true,
+    "memory_optimization": true
+  },
+  
+  "accessibility": {
+    "keyboard_navigation": true,
+    "screen_reader": true,
+    "high_contrast": true,
+    "font_scaling": true,
+    "focus_indicators": true
+  },
+  
+  "localization": {
+    "default_language": "pt-BR",
+    "supported_languages": ["pt-BR", "en-US", "es-ES", "fr-FR"],
+    "rtl_support": false
+  },
+  
+  "analytics": {
+    "usage_tracking": false,
+    "error_reporting": true,
+    "performance_monitoring": true,
+    "privacy_compliant": true
+  }
+}
+

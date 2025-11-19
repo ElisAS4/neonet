@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeoNet Chat</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <h1>💬 NeoNet Chat</h1>
+            <div class="status">
+                <span class="status-indicator" id="connectionStatus"></span>
+                <span id="statusText">Conectando...</span>
+            </div>
+        </div>
+
+        <div class="chat-messages" id="chatMessages">
+            <div class="system-message">
+                Bem-vindo ao NeoNet Chat! Suas mensagens são sincronizadas automaticamente quando online.
+            </div>
+        </div>
+
+        <div class="chat-input-container">
+            <input type="text" id="messageInput" placeholder="Digite sua mensagem..." maxlength="500">
+            <button id="sendButton">Enviar</button>
+        </div>
+
+        <div class="chat-info">
+            <small>Mensagens armazenadas localmente • Sincronização P2P automática</small>
+        </div>
+    </div>
+
+    <script src="chat.js"></script>
+</body>
+</html>
+

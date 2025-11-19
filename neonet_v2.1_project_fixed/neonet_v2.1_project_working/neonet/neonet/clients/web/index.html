@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeoNet - Internet Offline-First</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#2196F3">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .header h1 {
+            font-size: 3em;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .header p {
+            font-size: 1.2em;
+            margin: 10px 0;
+            opacity: 0.9;
+        }
+        .status {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+        .dapps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .dapp-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .dapp-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        .dapp-card h3 {
+            margin-top: 0;
+            color: #fff;
+        }
+        .dapp-card p {
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+        .btn {
+            background: #2196F3;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn:hover {
+            background: #1976D2;
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        .online { background: #4CAF50; }
+        .offline { background: #F44336; }
+        .connecting { background: #FF9800; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌐 NeoNet</h1>
+            <p>Internet Offline-First & Peer-to-Peer</p>
+        </div>
+
+        <div class="status">
+            <h3>Status da Rede</h3>
+            <p>
+                <span class="status-indicator connecting" id="networkStatus"></span>
+                <span id="networkStatusText">Conectando à rede P2P...</span>
+            </p>
+            <p>Pares conectados: <span id="peerCount">0</span></p>
+            <p>Modo: <span id="operationMode">Offline-First</span></p>
+        </div>
+
+        <div class="dapps-grid">
+            <div class="dapp-card">
+                <h3>💬 NeoNet Chat</h3>
+                <p>Sistema de chat descentralizado que funciona offline e sincroniza automaticamente quando online.</p>
+                <a href="/mock-dapps/neonet-chat/" class="btn">Abrir Chat</a>
+            </div>
+
+            <div class="dapp-card">
+                <h3>📝 NeoNet Notes</h3>
+                <p>Aplicativo de notas pessoais com sincronização P2P e criptografia local para máxima privacidade.</p>
+                <a href="/mock-dapps/neonet-notes/" class="btn">Abrir Notas</a>
+            </div>
+
+            <div class="dapp-card">
+                <h3>⚙️ Configurações</h3>
+                <p>Configure sua identidade, gerencie chaves criptográficas e ajuste preferências da rede.</p>
+                <button class="btn" onclick="openSettings()">Configurar</button>
+            </div>
+
+            <div class="dapp-card">
+                <h3>📊 Estatísticas</h3>
+                <p>Visualize estatísticas da rede, uso de cache, sincronização e performance offline.</p>
+                <button class="btn" onclick="openStats()">Ver Stats</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simulação de status da rede
+        function updateNetworkStatus() {
+            const statusIndicator = document.getElementById('networkStatus');
+            const statusText = document.getElementById('networkStatusText');
+            const peerCount = document.getElementById('peerCount');
+            
+            if (navigator.onLine) {
+                statusIndicator.className = 'status-indicator online';
+                statusText.textContent = 'Conectado à rede P2P';
+                peerCount.textContent = Math.floor(Math.random() * 10) + 1;
+            } else {
+                statusIndicator.className = 'status-indicator offline';
+                statusText.textContent = 'Modo offline - dados locais disponíveis';
+                peerCount.textContent = '0';
+            }
+        }
+
+        function openSettings() {
+            alert('Módulo de configurações em desenvolvimento');
+        }
+
+        function openStats() {
+            alert('Módulo de estatísticas em desenvolvimento');
+        }
+
+        // Atualizar status inicial
+        updateNetworkStatus();
+
+        // Monitorar mudanças de conectividade
+        window.addEventListener('online', updateNetworkStatus);
+        window.addEventListener('offline', updateNetworkStatus);
+
+        // Atualizar status periodicamente
+        setInterval(updateNetworkStatus, 5000);
+    </script>
+</body>
+</html>
+
