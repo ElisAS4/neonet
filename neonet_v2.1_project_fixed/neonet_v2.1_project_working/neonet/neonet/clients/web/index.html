@@ -3,178 +3,998 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NeoNet - Internet Offline-First</title>
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#2196F3">
+    <title>NeoNet Scalable - Internet Offline-First P2P</title>
+    
+    <!-- Meta tags para PWA -->
+    <meta name="description" content="Rede P2P offline-first com chat privado, streaming de vídeos e NeoBankof">
+    <meta name="theme-color" content="#2196f3">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="NeoNet Scalable">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><text y=\'.9em\' font-size=\'90\'>🌐</text></svg>">
+    
+    <!-- Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="src/utils/PeerManager_scalable.js" as="script">
+    
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        /* Reset e base */
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, \'Helvetica Neue\', Arial, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             min-height: 100vh;
+            overflow-x: hidden;
         }
+        
+        /* Container principal */
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
+        
+        /* Header */
         .header {
             text-align: center;
-            margin-bottom: 40px;
-        }
-        .header h1 {
-            font-size: 3em;
-            margin: 0;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-        .header p {
-            font-size: 1.2em;
-            margin: 10px 0;
-            opacity: 0.9;
-        }
-        .status {
-            background: rgba(255,255,255,0.1);
-            border-radius: 10px;
-            padding: 20px;
             margin-bottom: 30px;
-            backdrop-filter: blur(10px);
+            padding: 20px 0;
         }
-        .dapps-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
+        
+        .header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            background: linear-gradient(45deg, #fff, #e3f2fd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
-        .dapp-card {
+        
+        .header .subtitle {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+        
+        .header .version {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            background: rgba(255,255,255,0.1);
+            padding: 5px 15px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        
+        /* Seção de conexão */
+        .connection-section {
             background: rgba(255,255,255,0.1);
             border-radius: 15px;
             padding: 25px;
-            text-align: center;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 30px;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
         }
-        .dapp-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        
+        .connection-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
         }
-        .dapp-card h3 {
-            margin-top: 0;
-            color: #fff;
+        
+        .connection-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-        .dapp-card p {
-            opacity: 0.8;
-            line-height: 1.6;
-        }
-        .btn {
-            background: #2196F3;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-        }
-        .btn:hover {
-            background: #1976D2;
-        }
+        
         .status-indicator {
-            display: inline-block;
             width: 12px;
             height: 12px;
             border-radius: 50%;
-            margin-right: 8px;
+            animation: pulse 2s infinite;
         }
-        .online { background: #4CAF50; }
-        .offline { background: #F44336; }
-        .connecting { background: #FF9800; }
+        
+        .status-indicator.disconnected { background: #f44336; }
+        .status-indicator.connecting { background: #ff9800; }
+        .status-indicator.connected { background: #4caf50; }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .connect-btn {
+            background: linear-gradient(45deg, #2196f3, #21cbf3);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .connect-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4);
+        }
+        
+        .connect-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        /* Configuração de usuário */
+        .user-config {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .user-config.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+        
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            opacity: 0.9;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input::placeholder {
+            color: rgba(255,255,255,0.6);
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #2196f3;
+            background: rgba(255,255,255,0.15);
+            box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.2);
+        }
+        
+        /* Lista de peers */
+        .peers-section {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        
+        .peers-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+        .peers-count {
+            background: rgba(255,255,255,0.2);
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        
+        .peers-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .peer-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 15px;
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .peer-card:hover {
+            background: rgba(255,255,255,0.15);
+            transform: translateY(-2px);
+        }
+        
+        .peer-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .peer-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .peer-details {
+            flex: 1;
+        }
+        
+        .peer-name {
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+        
+        .peer-id {
+            font-size: 0.8rem;
+            opacity: 0.7;
+            font-family: monospace;
+        }
+        
+        .peer-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .peer-action-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.2s ease;
+        }
+        
+        .peer-action-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        /* Grid de dApps */
+        .dapps-section {
+            flex: 1;
+        }
+        
+        .dapps-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .dapps-header h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        .dapps-header p {
+            opacity: 0.8;
+            font-size: 1.1rem;
+        }
+        
+        .dapps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+        }
+        
+        .dapp-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .dapp-card::before {
+            content: \'\';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .dapp-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+        
+        .dapp-card:hover::before {
+            opacity: 1;
+        }
+        
+        .dapp-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        .dapp-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+        
+        .dapp-card p {
+            opacity: 0.8;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .dapp-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .dapp-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .dapp-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        /* Estados especiais */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            opacity: 0.7;
+        }
+        
+        .empty-state .icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+        
+        /* Loading states */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .connection-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .peers-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .dapps-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Notificações */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.9);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            z-index: 1000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.success {
+            border-left: 4px solid #4caf50;
+        }
+        
+        .notification.error {
+            border-left: 4px solid #f44336;
+        }
+        
+        .notification.info {
+            border-left: 4px solid #2196f3;
+        }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Header -->
         <div class="header">
-            <h1>🌐 NeoNet</h1>
-            <p>Internet Offline-First & Peer-to-Peer</p>
+            <h1>🌐 NeoNet Scalable</h1>
+            <div class="subtitle">Internet Offline-First & Peer-to-Peer</div>
+            <div class="version">v3.0.0 - Escala para 100M de Usuários</div>
         </div>
 
-        <div class="status">
-            <h3>Status da Rede</h3>
-            <p>
-                <span class="status-indicator connecting" id="networkStatus"></span>
-                <span id="networkStatusText">Conectando à rede P2P...</span>
-            </p>
-            <p>Pares conectados: <span id="peerCount">0</span></p>
-            <p>Modo: <span id="operationMode">Offline-First</span></p>
+        <!-- Seção de Conexão -->
+        <div class="connection-section">
+            <div class="connection-header">
+                <div class="connection-status">
+                    <span class="status-indicator disconnected" id="connectionStatus"></span>
+                    <span id="connectionStatusText">Desconectado da rede NeoNet</span>
+                </div>
+                <button class="connect-btn" id="connectBtn" onclick="toggleConnection()">
+                    <span id="connectBtnText">Conectar à Rede NeoNet</span>
+                </button>
+            </div>
+            
+            <!-- Configuração de usuário -->
+            <div class="user-config" id="userConfig">
+                <div class="form-group">
+                    <label for="userName">Seu Nome na Rede:</label>
+                    <input type="text" id="userName" placeholder="Digite seu nome (ex: João Silva)" maxlength="30">
+                </div>
+                <div class="form-group">
+                    <label for="userBio">Bio (opcional):</label>
+                    <input type="text" id="userBio" placeholder="Uma breve descrição sobre você" maxlength="100">
+                </div>
+            </div>
         </div>
 
-        <div class="dapps-grid">
-            <div class="dapp-card">
-                <h3>💬 NeoNet Chat</h3>
-                <p>Sistema de chat descentralizado que funciona offline e sincroniza automaticamente quando online.</p>
-                <a href="/mock-dapps/neonet-chat/" class="btn">Abrir Chat</a>
+        <!-- Lista de Peers -->
+        <div class="peers-section">
+            <div class="peers-header">
+                <h3>👥 Peers Conectados</h3>
+                <div class="peers-count" id="peersCount">0 peers online</div>
             </div>
-
-            <div class="dapp-card">
-                <h3>📝 NeoNet Notes</h3>
-                <p>Aplicativo de notas pessoais com sincronização P2P e criptografia local para máxima privacidade.</p>
-                <a href="/mock-dapps/neonet-notes/" class="btn">Abrir Notas</a>
+            <div class="peers-list" id="peersList">
+                <div class="empty-state">
+                    <div class="icon">🔍</div>
+                    <p>Conecte-se à rede para ver outros peers</p>
+                </div>
             </div>
+        </div>
 
-            <div class="dapp-card">
-                <h3>⚙️ Configurações</h3>
-                <p>Configure sua identidade, gerencie chaves criptográficas e ajuste preferências da rede.</p>
-                <button class="btn" onclick="openSettings()">Configurar</button>
+        <!-- dApps -->
+        <div class="dapps-section">
+            <div class="dapps-header">
+                <h2>🚀 Aplicações Descentralizadas</h2>
+                <p>Escolha um dApp para começar a usar a rede NeoNet</p>
             </div>
+            
+            <div class="dapps-grid">
+                <div class="dapp-card">
+                    <span class="dapp-icon">💬</span>
+                    <h3>NeoNet Chat</h3>
+                    <p>Converse diretamente com outros peers da rede. Mensagens criptografadas e 100% privadas.</p>
+                    <button class="dapp-btn" id="chatBtn" onclick="openChat()" disabled>
+                        Abrir Chat
+                    </button>
+                </div>
 
-            <div class="dapp-card">
-                <h3>📊 Estatísticas</h3>
-                <p>Visualize estatísticas da rede, uso de cache, sincronização e performance offline.</p>
-                <button class="btn" onclick="openStats()">Ver Stats</button>
+                <div class="dapp-card">
+                    <span class="dapp-icon">🎥</span>
+                    <h3>NeoNet Videos</h3>
+                    <p>Compartilhe e assista vídeos de outros peers. Sistema tipo YouTube descentralizado.</p>
+                    <button class="dapp-btn" id="videosBtn" onclick="openVideos()" disabled>
+                        Abrir Vídeos
+                    </button>
+                </div>
+
+
+                </div>
+
+                <div class="dapp-card">
+                    <span class="dapp-icon">📝</span>
+                    <h3>NeoNet Notes</h3>
+                    <p>Crie e organize suas notas com sincronização automática entre dispositivos.</p>
+                    <button class="dapp-btn" id="notesBtn" onclick="openNotes()" disabled>
+                        Abrir Notas
+                    </button>
+                </div>
+
+                <div class="dapp-card">
+                    <span class="dapp-icon">⚙️</span>
+                    <h3>Configurações</h3>
+                    <p>Configure sua identidade, gerencie chaves e ajuste preferências da rede.</p>
+                    <button class="dapp-btn" onclick="openSettings()">
+                        Configurações
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- Notificação -->
+    <div class="notification" id="notification">
+        <span id="notificationText"></span>
+    </div>
+
+    <!-- Scripts -->
+    <script src="src/utils/PeerManager_scalable.js"></script>
+    
     <script>
-        // Simulação de status da rede
-        function updateNetworkStatus() {
-            const statusIndicator = document.getElementById('networkStatus');
-            const statusText = document.getElementById('networkStatusText');
-            const peerCount = document.getElementById('peerCount');
+        // Estado global da aplicação
+        let appState = {
+            isConnected: false,
+            isConnecting: false,
+            userName: \'\',
+            userBio: \'\',
+            peers: new Map(), // Map<nodeId, { nodeId, userName, userBio, lastSeen, ssnId }>
+            peerManager: null
+        };
+
+        // Elementos DOM
+        const elements = {
+            connectionStatus: document.getElementById(\'connectionStatus\'),
+            connectionStatusText: document.getElementById(\'connectionStatusText\'),
+            connectBtn: document.getElementById(\'connectBtn\'),
+            connectBtnText: document.getElementById(\'connectBtnText\'),
+            userConfig: document.getElementById(\'userConfig\'),
+            userName: document.getElementById(\'userName\'),
+            userBio: document.getElementById(\'userBio\'),
+            peersList: document.getElementById(\'peersList\'),
+            peersCount: document.getElementById(\'peersCount\'),
+            chatBtn: document.getElementById(\'chatBtn\'),
+            videosBtn: document.getElementById(\'videosBtn\'),
+            bankofBtn: document.getElementById(\'bankofBtn\'),
+            notesBtn: document.getElementById(\'notesBtn\'),
+            notification: document.getElementById(\'notification\'),
+            notificationText: document.getElementById(\'notificationText\')
+        };
+
+        // Inicialização
+        document.addEventListener(\'DOMContentLoaded\', () => {
+            console.log(\'[NeoNet] Inicializando aplicação v3.0.0 (Scalable)\');
+            loadUserData();
+            initializePeerManager();
+            setupEventListeners();
+            updateUI();
+        });
+
+        // Carregar dados do usuário salvos
+        function loadUserData() {
+            const savedUserName = localStorage.getItem(\'neonet_user_name\');
+            const savedUserBio = localStorage.getItem(\'neonet_user_bio\');
             
-            if (navigator.onLine) {
-                statusIndicator.className = 'status-indicator online';
-                statusText.textContent = 'Conectado à rede P2P';
-                peerCount.textContent = Math.floor(Math.random() * 10) + 1;
-            } else {
-                statusIndicator.className = 'status-indicator offline';
-                statusText.textContent = 'Modo offline - dados locais disponíveis';
-                peerCount.textContent = '0';
+            if (savedUserName) {
+                elements.userName.value = savedUserName;
+                appState.userName = savedUserName;
+            }
+            
+            if (savedUserBio) {
+                elements.userBio.value = savedUserBio;
+                appState.userBio = savedUserBio;
             }
         }
 
+        // Salvar dados do usuário
+        function saveUserData() {
+            appState.userName = elements.userName.value.trim();
+            appState.userBio = elements.userBio.value.trim();
+            
+            localStorage.setItem(\'neonet_user_name\', appState.userName);
+            localStorage.setItem(\'neonet_user_bio\', appState.userBio);
+        }
+
+        // Inicializar PeerManager
+        function initializePeerManager() {
+            if (window.PeerManagerScalable) {
+                appState.peerManager = new window.PeerManagerScalable({
+                    signalingServerUrl: \'ws://localhost:8080\', // Usar o novo servidor distribuído
+                    onPeerJoined: handlePeerJoined,
+                    onPeerLeft: handlePeerLeft,
+                    onConnectionStatusChanged: handleConnectionStatusChanged,
+                    onMessage: handlePeerMessage
+                });
+                console.log(\'[NeoNet] PeerManagerScalable inicializado\');
+            } else {
+                console.error(\'[NeoNet] PeerManagerScalable não encontrado\');
+                showNotification(\'Erro ao carregar PeerManager\', \'error\');
+            }
+        }
+
+        // Event listeners
+        function setupEventListeners() {
+            // Salvar dados do usuário quando mudar
+            elements.userName.addEventListener(\'input\', saveUserData);
+            elements.userBio.addEventListener(\'input\', saveUserData);
+            
+            // Enter para conectar
+            elements.userName.addEventListener(\'keypress\', (e) => {
+                if (e.key === \'Enter\' && !appState.isConnected && !appState.isConnecting) {
+                    toggleConnection();
+                }
+            });
+        }
+
+        // Toggle conexão
+        async function toggleConnection() {
+            if (appState.isConnecting) return;
+            
+            if (!appState.isConnected) {
+                await connectToNetwork();
+            } else {
+                await disconnectFromNetwork();
+            }
+        }
+
+        // Conectar à rede
+        async function connectToNetwork() {
+            const userName = elements.userName.value.trim();
+            
+            if (!userName) {
+                showNotification(\'Por favor, digite seu nome antes de conectar\', \'error\');
+                elements.userName.focus();
+                return;
+            }
+            
+            if (userName.length < 2) {
+                showNotification(\'Nome deve ter pelo menos 2 caracteres\', \'error\');
+                elements.userName.focus();
+                return;
+            }
+            
+            appState.isConnecting = true;
+            updateUI();
+            
+            try {
+                saveUserData();
+                
+                if (appState.peerManager) {
+                    await appState.peerManager.connect({
+                        userName: appState.userName,
+                        userBio: appState.userBio
+                    });
+                    
+                    appState.isConnected = true;
+                    showNotification(`Conectado à rede como ${appState.userName}`, \'success\');
+                } else {
+                    throw new Error(\'PeerManager não disponível\');
+                }
+                
+            } catch (error) {
+                console.error(\'[NeoNet] Erro ao conectar:\', error);
+                showNotification(\'Erro ao conectar à rede: \' + error.message, \'error\');
+                appState.isConnected = false;
+            }
+            
+            appState.isConnecting = false;
+            updateUI();
+        }
+
+        // Desconectar da rede
+        async function disconnectFromNetwork() {
+            try {
+                if (appState.peerManager) {
+                    await appState.peerManager.disconnect();
+                }
+                
+                appState.isConnected = false;
+                appState.peers.clear();
+                showNotification(\'Desconectado da rede\', \'info\');
+                
+            } catch (error) {
+                console.error(\'[NeoNet] Erro ao desconectar:\', error);
+                showNotification(\'Erro ao desconectar: \' + error.message, \'error\');
+            }
+            
+            updateUI();
+        }
+
+        // Handlers de eventos do PeerManager
+        function handlePeerJoined(peer) {
+            console.log(\'[NeoNet] Peer conectado:\', peer);
+            appState.peers.set(peer.nodeId, peer);
+            updatePeersList();
+            showNotification(`${peer.userName} entrou na rede`, \'info\');
+        }
+
+        function handlePeerLeft(peer) {
+            console.log(\'[NeoNet] Peer desconectado:\', peer);
+            appState.peers.delete(peer.nodeId);
+            updatePeersList();
+            showNotification(`${peer.userName} saiu da rede`, \'info\');
+        }
+
+        function handleConnectionStatusChanged(status) {
+            console.log(\'[NeoNet] Status de conexão mudou:\', status);
+            appState.isConnected = status === \'connected\';
+            updateUI();
+        }
+
+        function handlePeerMessage(message) {
+            console.log(\'[NeoNet] Mensagem recebida:\', message);
+            // Implementar handling de mensagens
+            // Este é o ponto onde as mensagens P2P dos dApps seriam roteadas
+            // Ex: if (message.dapp === \'chat\') handleChatMessage(message);
+            // Ex: if (message.dapp === \'bankof\') handleBankofMessage(message);
+        }
+
+        // Atualizar interface
+        function updateUI() {
+            // Status de conexão
+            if (appState.isConnecting) {
+                elements.connectionStatus.className = \'status-indicator connecting\';
+                elements.connectionStatusText.textContent = \'Conectando à rede...\';
+                elements.connectBtnText.innerHTML = \'<span class="loading"></span> Conectando...\';
+                elements.connectBtn.disabled = true;
+                elements.userConfig.classList.add(\'show\');
+            } else if (appState.isConnected) {
+                elements.connectionStatus.className = \'status-indicator connected\';
+                elements.connectionStatusText.textContent = `Conectado como ${appState.userName}`;
+                elements.connectBtnText.textContent = \'Desconectar\';
+                elements.connectBtn.disabled = false;
+                elements.userConfig.classList.remove(\'show\');
+            } else {
+                elements.connectionStatus.className = \'status-indicator disconnected\';
+                elements.connectionStatusText.textContent = \'Desconectado da rede NeoNet\';
+                elements.connectBtnText.textContent = \'Conectar à Rede NeoNet\';
+                elements.connectBtn.disabled = false;
+                elements.userConfig.classList.add(\'show\');
+            }
+            
+            // Botões dos dApps
+            const dappButtons = [elements.chatBtn, elements.videosBtn, elements.bankofBtn, elements.notesBtn];
+            dappButtons.forEach(btn => {
+                btn.disabled = !appState.isConnected;
+            });
+            
+            updatePeersList();
+        }
+
+        // Atualizar lista de peers
+        function updatePeersList() {
+            const peersArray = Array.from(appState.peers.values());
+            elements.peersCount.textContent = `${peersArray.length} peer${peersArray.length !== 1 ? \'s\' : \'\'} online`;
+            
+            if (peersArray.length === 0) {
+                elements.peersList.innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">${appState.isConnected ? \'👥\' : \'🔍\'}</div>
+                        <p>${appState.isConnected ? \'Nenhum peer conectado no momento\' : \'Conecte-se à rede para ver outros peers\'}</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            elements.peersList.innerHTML = peersArray.map(peer => `
+                <div class="peer-card">
+                    <div class="peer-info">
+                        <div class="peer-avatar">${peer.userName.charAt(0).toUpperCase()}</div>
+                        <div class="peer-details">
+                            <div class="peer-name">${escapeHtml(peer.userName)}</div>
+                            <div class="peer-id">${peer.nodeId.substring(0, 8)}...</div>
+                        </div>
+                    </div>
+                    <div class="peer-actions">
+                        <button class="peer-action-btn" onclick="chatWithPeer(\'${peer.nodeId}\')">💬 Chat</button>
+                        <button class="peer-action-btn" onclick="viewPeerVideos(\'${peer.nodeId}\')">🎥 Vídeos</button>
+                        <button class="peer-action-btn" onclick="transactWithPeer(\'${peer.nodeId}\')">💰 Bankof</button>
+                    </div>
+                </div>
+            `).join(\'\');
+        }
+
+        // Funções dos dApps
+        function openChat() {
+            if (!appState.isConnected) {
+                showNotification(\'Conecte-se à rede primeiro\', \'error\');
+                return;
+            }
+            // Passar o peerManager para o dApp de chat
+            window.open(\'mock-dapps/neonet-chat/index_private.html\', \'_blank\');
+        }
+
+        function openVideos() {
+            if (!appState.isConnected) {
+                showNotification(\'Conecte-se à rede primeiro\', \'error\');
+                return;
+            }
+            // Passar o peerManager para o dApp de vídeos
+            window.open(\'mock-dapps/neonet-videos/index_streaming.html\', \'_blank\');
+        }
+
+        function openBankof() {
+            if (!appState.isConnected) {
+                showNotification(\'Conecte-se à rede primeiro\', \'error\');
+                return;
+            }
+            // Passar o peerManager para o dApp do Bankof
+            window.open(\'mock-dapps/neobankof/index.html\', \'_blank\');
+        }
+
+        function openNotes() {
+            // Notes não precisa de conexão P2P direta para funcionar, apenas para sincronizar
+            window.open(\'mock-dapps/neonet-notes/index.html\', \'_blank\');
+        }
+
         function openSettings() {
-            alert('Módulo de configurações em desenvolvimento');
+            showNotification(\'Módulo de configurações em desenvolvimento\', \'info\');
         }
 
-        function openStats() {
-            alert('Módulo de estatísticas em desenvolvimento');
+        // Ações com peers
+        function chatWithPeer(peerId) {
+            const peer = appState.peers.get(peerId);
+            if (peer) {
+                const chatUrl = `mock-dapps/neonet-chat/index_private.html?peer=${encodeURIComponent(peerId)}&name=${encodeURIComponent(peer.userName)}`;
+                window.open(chatUrl, \'_blank\');
+            }
         }
 
-        // Atualizar status inicial
-        updateNetworkStatus();
+        function viewPeerVideos(peerId) {
+            const peer = appState.peers.get(peerId);
+            if (peer) {
+                const videosUrl = `mock-dapps/neonet-videos/index_streaming.html?peer=${encodeURIComponent(peerId)}&name=${encodeURIComponent(peer.userName)}`;
+                window.open(videosUrl, \'_blank\');
+            }
+        }
 
-        // Monitorar mudanças de conectividade
-        window.addEventListener('online', updateNetworkStatus);
-        window.addEventListener('offline', updateNetworkStatus);
+        function transactWithPeer(peerId) {
+            const peer = appState.peers.get(peerId);
+            if (peer) {
+                const bankofUrl = `mock-dapps/neobankof/index.html?peer=${encodeURIComponent(peerId)}&name=${encodeURIComponent(peer.userName)}`;
+                window.open(bankofUrl, \'_blank\');
+            }
+        }
 
-        // Atualizar status periodicamente
-        setInterval(updateNetworkStatus, 5000);
+        // Mostrar notificação
+        function showNotification(message, type = \'info\') {
+            elements.notificationText.textContent = message;
+            elements.notification.className = `notification ${type} show`;
+            
+            setTimeout(() => {
+                elements.notification.classList.remove(\'show\');
+            }, 4000);
+        }
+
+        // Utilitários
+        function escapeHtml(text) {
+            const div = document.createElement(\'div\');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Service Worker
+        if (\'serviceWorker\' in navigator) {
+            window.addEventListener(\'load\', () => {
+                navigator.serviceWorker.register(\'sw.js\') // Usar sw.js ou sw_enhanced.js
+                    .then(registration => {
+                        console.log(\'[SW] Service Worker registrado:\', registration.scope);
+                    })
+                    .catch(error => {
+                        console.log(\'[SW] Falha ao registrar Service Worker:\', error);
+                    });
+            });
+        }
+
+        // PWA install prompt
+        let deferredPrompt;
+        
+        window.addEventListener(\'beforeinstallprompt\', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            console.log(\'[PWA] Install prompt disponível\');
+        });
+
+        // Handle app visibility changes
+        document.addEventListener(\'visibilitychange\', () => {
+            if (document.visibilityState === \'visible\' && appState.isConnected) {
+                console.log(\'[NeoNet] App ficou visível, atualizando peers\');
+                if (appState.peerManager) {
+                    // appState.peerManager.refreshPeersList(); // PeerManagerScalable já faz isso periodicamente
+                }
+            }
+        });
+
+        // Handle online/offline events
+        window.addEventListener(\'online\', () => {
+            console.log(\'[NeoNet] Conexão com internet restaurada\');
+            if (appState.peerManager && !appState.isConnected) {
+                showNotification(\'Conexão restaurada. Você pode se reconectar à rede.\', \'info\');
+            }
+        });
+
+        window.addEventListener(\'offline\', () => {
+            console.log(\'[NeoNet] Conexão com internet perdida\');
+            showNotification(\'Conexão perdida. Modo offline ativado.\', \'info\');
+        });
+
+        // Global error handler
+        window.addEventListener(\'error\', (event) => {
+            console.error(\'[NeoNet] Erro global:\', event.error);
+            showNotification(\'Erro inesperado: \' + event.error.message, \'error\');
+        });
+
+        // Unhandled promise rejection handler
+        window.addEventListener(\'unhandledrejection\', (event) => {
+            console.error(\'[NeoNet] Promise rejeitada:\', event.reason);
+            showNotification(\'Erro de conexão: \' + event.reason, \'error\');
+        });
     </script>
 </body>
 </html>
-
