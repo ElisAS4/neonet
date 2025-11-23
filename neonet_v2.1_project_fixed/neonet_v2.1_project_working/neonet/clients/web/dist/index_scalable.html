@@ -1,4 +1,30 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>NeoNet Scalable - Internet Offline-First P2P</title><meta name="description" content="Rede P2P offline-first com chat privado, streaming de vídeos e NeoBankof"><meta name="theme-color" content="#2196f3"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="NeoNet Scalable"><link rel="icon" type="image/png" sizes="32x32" href="data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><text y=\'.9em\' font-size=\'90\'>🌐</text></svg>"><link rel="manifest" href="manifest.json"><link rel="preload" href="src/utils/PeerManager_scalable.js" as="script"><style>/* Reset e base */
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Munduuu - Internet Grátis</title>
+    
+    <!-- Meta tags para PWA -->
+    <meta name="description" content="Rede P2P offline-first com chat privado, streaming de vídeos e NeoBankof">
+    <meta name="theme-color" content="#2196f3">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="NeoNet Scalable">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><text y=\'.9em\' font-size=\'90\'>🌐</text></svg>">
+    
+    <!-- Manifest -->
+    <!-- <link rel="manifest" href="manifest.json"> Removido: Arquivo não existe no build -->
+    
+    <!-- Preload critical resources -->
+    
+    <!-- <link rel="preload" href="src/utils/PeerManager_scalable.js" as="script"> Removido: Conteúdo empacotado em bundle.js -->
+
+    
+    <style>
+        /* Reset e base */
         * {
             margin: 0;
             padding: 0;
@@ -464,7 +490,118 @@
         
         .notification.info {
             border-left: 4px solid #2196f3;
-        }</style><script defer="defer" src="bundle.js"></script></head><body><div class="container"><div class="header"><h1>🌐 NeoNet Scalable</h1><div class="subtitle">Internet Offline-First & Peer-to-Peer</div><div class="version">v3.0.0 - Escala para 100M de Usuários</div></div><div class="connection-section"><div class="connection-header"><div class="connection-status"><span class="status-indicator disconnected" id="connectionStatus"></span> <span id="connectionStatusText">Desconectado da rede NeoNet</span></div><button class="connect-btn" id="connectBtn" onclick="toggleConnection()"><span id="connectBtnText">Conectar à Rede NeoNet</span></button></div><div class="user-config" id="userConfig"><div class="form-group"><label for="userName">Seu Nome na Rede:</label> <input id="userName" placeholder="Digite seu nome (ex: João Silva)" maxlength="30"></div><div class="form-group"><label for="userBio">Bio (opcional):</label> <input id="userBio" placeholder="Uma breve descrição sobre você" maxlength="100"></div></div></div><div class="peers-section"><div class="peers-header"><h3>👥 Peers Conectados</h3><div class="peers-count" id="peersCount">0 peers online</div></div><div class="peers-list" id="peersList"><div class="empty-state"><div class="icon">🔍</div><p>Conecte-se à rede para ver outros peers</p></div></div></div><div class="dapps-section"><div class="dapps-header"><h2>🚀 Aplicações Descentralizadas</h2><p>Escolha um dApp para começar a usar a rede NeoNet</p></div><div class="dapps-grid"><div class="dapp-card"><span class="dapp-icon">💬</span><h3>NeoNet Chat</h3><p>Converse diretamente com outros peers da rede. Mensagens criptografadas e 100% privadas.</p><button class="dapp-btn" id="chatBtn" onclick="openChat()" disabled="disabled">Abrir Chat</button></div><div class="dapp-card"><span class="dapp-icon">🎥</span><h3>NeoNet Videos</h3><p>Compartilhe e assista vídeos de outros peers. Sistema tipo YouTube descentralizado.</p><button class="dapp-btn" id="videosBtn" onclick="openVideos()" disabled="disabled">Abrir Vídeos</button></div></div><div class="dapp-card"><span class="dapp-icon">📝</span><h3>NeoNet Notes</h3><p>Crie e organize suas notas com sincronização automática entre dispositivos.</p><button class="dapp-btn" id="notesBtn" onclick="openNotes()" disabled="disabled">Abrir Notas</button></div><div class="dapp-card"><span class="dapp-icon">⚙️</span><h3>Configurações</h3><p>Configure sua identidade, gerencie chaves e ajuste preferências da rede.</p><button class="dapp-btn" onclick="openSettings()">Configurações</button></div></div></div><div class="notification" id="notification"><span id="notificationText"></span></div><script src="src/utils/PeerManager_scalable.js"></script><script>// Estado global da aplicação
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🌐 Munduuu</h1>
+            <div class="subtitle">Internet Grátis</div>
+            <div class="version">Esse Munduuu pertence á você</div>
+        </div>
+
+        <!-- Seção de Conexão -->
+        <div class="connection-section">
+            <div class="connection-header">
+                <div class="connection-status">
+                    <span class="status-indicator disconnected" id="connectionStatus"></span>
+                    <span id="connectionStatusText">Desconectado da rede NeoNet</span>
+                </div>
+                <button class="connect-btn" id="connectBtn">
+
+                  
+
+                </button>
+            </div>
+            
+            <!-- Configuração de usuário -->
+            <div class="user-config" id="userConfig">
+                <div class="form-group">
+                    <label for="userName">Seu Nome na Rede:</label>
+                    <input type="text" id="userName" placeholder="Digite seu nome (ex: João Silva)" maxlength="30">
+                </div>
+                <div class="form-group">
+                    <label for="userBio">Bio (opcional):</label>
+                    <input type="text" id="userBio" placeholder="Uma breve descrição sobre você" maxlength="100">
+                </div>
+            </div>
+        </div>
+
+        <!-- Lista de Peers -->
+        <div class="peers-section">
+            <div class="peers-header">
+                <h3>👥 Peers Conectados</h3>
+                <div class="peers-count" id="peersCount">0 peers online</div>
+            </div>
+            <div class="peers-list" id="peersList">
+                <div class="empty-state">
+                    <div class="icon">🔍</div>
+                    <p>Conecte-se à rede para ver outros peers</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- dApps -->
+        <div class="dapps-section">
+            <div class="dapps-header">
+                <h2>🚀 Aplicações Descentralizadas</h2>
+                <p>Escolha um dApp para começar a usar a rede NeoNet</p>
+            </div>
+            
+            <div class="dapps-grid">
+                <div class="dapp-card">
+                    <span class="dapp-icon">💬</span>
+                    <h3>NeoNet Chat</h3>
+                    <p>Converse diretamente com outros peers da rede. Mensagens criptografadas e 100% privadas.</p>
+                    <button class="dapp-btn" id="chatBtn" onclick="openChat()" disabled>
+                        Abrir Chat
+                    </button>
+                </div>
+
+                <div class="dapp-card">
+                    <span class="dapp-icon">🎥</span>
+                    <h3>NeoNet Videos</h3>
+                    <p>Compartilhe e assista vídeos de outros peers. Sistema tipo YouTube descentralizado.</p>
+                    <button class="dapp-btn" id="videosBtn" onclick="openVideos()" disabled>
+                        Abrir Vídeos
+                    </button>
+                </div>
+
+
+                </div>
+
+                <div class="dapp-card">
+                    <span class="dapp-icon">📝</span>
+                    <h3>NeoNet Notes</h3>
+                    <p>Crie e organize suas notas com sincronização automática entre dispositivos.</p>
+                    <button class="dapp-btn" id="notesBtn" onclick="openNotes()" disabled>
+                        Abrir Notas
+                    </button>
+                </div>
+
+                <div class="dapp-card">
+                    <span class="dapp-icon">⚙️</span>
+                    <h3>Configurações</h3>
+                    <p>Configure sua identidade, gerencie chaves e ajuste preferências da rede.</p>
+                    <button class="dapp-btn" onclick="openSettings()">
+                        Configurações
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notificação -->
+    <div class="notification" id="notification">
+        <span id="notificationText"></span>
+    </div>
+
+    
+    
+    <script>
+        // Estado global da aplicação
         let appState = {
             isConnected: false,
             isConnecting: false,
@@ -860,4 +997,7 @@
         window.addEventListener(\'unhandledrejection\', (event) => {
             console.error(\'[NeoNet] Promise rejeitada:\', event.reason);
             showNotification(\'Erro de conexão: \' + event.reason, \'error\');
-        });</script></body></html>
+        });
+    </script>
+</body>
+</html>
