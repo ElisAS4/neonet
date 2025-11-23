@@ -19,7 +19,9 @@
     <!-- <link rel="manifest" href="manifest.json"> Removido: Arquivo não existe no build -->
     
     <!-- Preload critical resources -->
-    <link rel="preload" href="src/utils/PeerManager_scalable.js" as="script">
+    
+    <!-- <link rel="preload" href="src/utils/PeerManager_scalable.js" as="script"> Removido: Conteúdo empacotado em bundle.js -->
+
     
     <style>
         /* Reset e base */
@@ -507,8 +509,9 @@
                     <span class="status-indicator disconnected" id="connectionStatus"></span>
                     <span id="connectionStatusText">Desconectado da rede NeoNet</span>
                 </div>
-                
-                    <button class="connect-btn" id="connectBtn">
+                <button class="connect-btn" id="connectBtn">
+
+                  
 
                 </button>
             </div>
