@@ -102,5 +102,3 @@ function escapeHtml(text) {
 
 // Initial update of peer list
 updatePeerList();
-
-
