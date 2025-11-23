@@ -1,5 +1,5 @@
 const path = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
+const HtmlWebpackPlugin = require = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 module.exports = {
@@ -24,6 +24,7 @@ module.exports = {
           from: "mock-dapps/neonet-videos",
           to: "mock-dapps/neonet-videos",
         },
+        // REMOVIDO: { from: "src/utils/PeerManager_scalable.js", to: "src/utils/PeerManager_scalable.js" },
       ],
     }),
   ],
