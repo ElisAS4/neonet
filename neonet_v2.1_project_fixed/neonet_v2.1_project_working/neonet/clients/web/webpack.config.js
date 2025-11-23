@@ -24,7 +24,6 @@ module.exports = {
           from: "mock-dapps/neonet-videos",
           to: "mock-dapps/neonet-videos",
         },
-
       ],
     }),
   ],
@@ -57,5 +56,3 @@ module.exports = {
     port: 3000,
   },
 };
-
-
